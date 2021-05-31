@@ -141,8 +141,8 @@ class Connection():
         @return: cursor: 回傳mongodb的清單物件
         """
         doc = {'state': 0}
-        if s != '': doc['s'] = s
-        if d != '': doc['d'] = d
+        if s != '': doc['s'] = {'$regex': s, '$options': 'i'}
+        if d != '': doc['d'] = {'$regex': d, '$options': 'i'}
         print(doc)
         return self.db.request.find(doc)
     
@@ -333,6 +333,8 @@ class Connection():
         @param dept: str: 新的學系
         @param grade: int: 新的年級
         @param gender: str: 新的性別
+
+        @return: boolean: 有無更新
         """
         doc = {'$set': {}}
         edit = False
@@ -350,10 +352,24 @@ class Connection():
             edit = True
         #print(doc)
         if edit:
-            self.db.user.update_one(
+            result = self.db.user.update_one(
                 {'_id': oid},
                 doc
             )
+            return result.raw_result['nModified'] == 1
+        return edit
+
+    def _getUsers(self):
+        """
+        回傳所有使用者的資料
+        """
+        return self.db.user.find({})
+
+    def _getReqs(self):
+        """
+        回傳所有訂單資料
+        """
+        return self.db.request.find({})
 
     #更新被評價的人的評分
     def __updateRate(self, oid: ObjectId, operator: str):
@@ -395,17 +411,24 @@ class Connection():
         @param oid: objid: 使用者的id
         @param f: BufferReader: 檔案，mode = 'rb'
         @param t: str: 副檔名: 'jpg'、'png'...
+
+        @return: boolean: 成功失敗
         """
         imgput = GridFS(self.db)
         result = self.db.user.find_one({'_id': oid})
-        if result:
-            if result['cert'] != None:
-                imgput.delete(result['cert'])
-            insertimg = imgput.put(f, type = t, name = str(oid))
-            self.db.user.update_one(
-                {'_id': oid},
-                {'$set': {'cert': insertimg}}
-            )
+        if not result:
+            print('找不到使用者')
+            return False
+
+        if result['cert'] != None:
+            imgput.delete(result['cert'])
+        insertimg = imgput.put(f, type = t, name = str(oid))
+        self.db.user.update_one(
+            {'_id': oid},
+            {'$set': {'cert': insertimg}}
+        )
+
+        return True
 
     # 匯出圖片
     def extractCert(self, oid, dir = './'):
@@ -414,14 +437,18 @@ class Connection():
 
         @param oid: objid: 使用者的id
         @param dir: str: 要匯出的資料夾
-        """
 
+        @return: boolean: 成功失敗
+        """
         gridFS = GridFS(self.db, collection="fs")
         target = self.db['fs.files'].find_one({'name': str(oid)})
-        
+
         if target:
             data = gridFS.find_one({'_id': target['_id']}).read() 
             out = open(dir + str(oid) + '.' + target['type'],'wb')
             out.write(data)  
             out.close()
-        return
+        else:
+            print('找不到使用者上傳的圖片')
+            return False
+        return True
