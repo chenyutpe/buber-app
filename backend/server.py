@@ -1,5 +1,5 @@
 from flask import Flask, request
-# from flask_cors import CORS
+from flask_cors import CORS
 from connect import Connection
 from bson.objectid import ObjectId
 from bson import json_util
@@ -8,7 +8,7 @@ from bson import json_util
 # initializations
 
 app = Flask(__name__)
-# CORS(app)
+CORS(app)
 
 app.config['SECRET_KEY'] = 'so_secret'
 
@@ -160,10 +160,8 @@ def set_profile():
     oid = ObjectId(oid)
     grade = int(grade)
 
-    # TODO: no return from db now, maybe should add success confirm
-    # result = db.editProfile(oid, name, dept, grade, gender)
-    db.editProfile(oid, name, dept, grade, gender)
-    return "Updated!"
+    result = db.editProfile(oid, name, dept, grade, gender)
+    return result
 
 @app.route('/cert', methods=['POST'])
 def post_cert():
@@ -173,8 +171,7 @@ def post_cert():
     t = 'jpg'
     oid = ObjectId(oid)
 
-    # TODO: no return from db now, maybe should add success confirm
-    db.uplodeCert(oid, f, t)
-    return "Updated!"
+    result = db.uplodeCert(oid, f, t)
+    return result
 
 # TODO: No API to use db.extractCert yet
