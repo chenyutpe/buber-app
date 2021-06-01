@@ -40,7 +40,8 @@ const signUpButtonText = "Sign up!";
 const beADriverButtonText = "Wanna be a driver?";
 const wallButtonText = "Take a ride!";
 const saveChangeButtonText = "Save changes";
-const uploadImageButtonText = "Upload your bike license!";
+const chooseImageButtonText = "Upload your bike license!";
+const uploadImageButtonText = "Upload";
 const chooseButtonText = "Choose!";
 const sendButtonText = "Send request";
 /* Validator & ErrorText */

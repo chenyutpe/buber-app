@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-//import 'dart:io';
-//import 'dart:convert';
-//import 'package:http/http.dart' as http;
-//import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import 'dart:convert';
+import 'package:async/async.dart';
+import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'dart:developer';
 import 'helpers/Constants.dart';
 import 'MainPage.dart';
@@ -73,16 +74,43 @@ class ModifiedForm extends State<ModifiedPage> {
   final snackBar = SnackBar(content: Text(uploadImageHintText ));
   var editedData = userData;
   var _gender;
+  var _isChosen;
   /*
   var _status;
   */
-
   var be_a_driver;
+  File file = File('');
+
+  final String phpEndPoint = '';
+  final String nodeEndPoint = '';
+
+  void _choose() async {
+    file = await ImagePicker.pickImage(source: ImageSource.camera);
+// file = await ImagePicker.pickImage(source: ImageSource.gallery);
+  }
+
+  void _upload() {
+    if (file == null) return;
+    String base64Image = base64Encode(file.readAsBytesSync());
+    String fileName = file.path.split("/").last;
+
+    http.post(phpEndPoint, body: {
+      "image": base64Image,
+      "name": fileName,
+    }).then((res) {
+      print(res.statusCode);
+    }).catchError((err) {
+      print(err);
+    });
+  }
+
+
 
   @override
   void initState() {
     setState(() {
       be_a_driver = false;
+      _isChosen = false;
     });
   }
 
@@ -262,12 +290,27 @@ class ModifiedForm extends State<ModifiedPage> {
       ),
     );
     /* 上傳照片 */
-    final uploadImage = Visibility(
+    final chooseImage = Visibility(
       visible: (be_a_driver && editedData.cert == '') ? true : false,
       child: TextButton(
         style: ButtonStyle(
         ),
         onPressed: () {
+          _choose();
+          //TODO: Upload {cert: image} through image_picker and http.
+          //TODO: Send {cert: image} to backend.
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        },
+        child: Text(chooseImageButtonText, style: textButtonStyle),
+      ),
+    );
+    final uploadImage = Visibility(
+      visible: (_isChosen && editedData.cert == '') ? true : false,
+      child: TextButton(
+        style: ButtonStyle(
+        ),
+        onPressed: () {
+          _upload();
           //TODO: Upload {cert: image} through image_picker and http.
           //TODO: Send {cert: image} to backend.
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -299,6 +342,7 @@ class ModifiedForm extends State<ModifiedPage> {
                   status,
                   */
                   beADriver,
+                  chooseImage,
                   uploadImage,
                   saveChangeButton,
                 ],
