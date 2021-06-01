@@ -9,8 +9,11 @@ class Notif extends StatefulWidget {
 
 class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
   //TODO: Get two type of notification List pRideList and dRideList from backend.
+  //@get: pRideList: List<Object>, dRideList: List<Object>
 
   late TabController _tabController;
+  final accept = SnackBar(content: Text("Accept"));
+  final decline = SnackBar(content: Text("decline"));
   var _isPFinished;
   var _isDFinished;
   var _rating;
@@ -71,10 +74,11 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
         body: TabBarView(
           controller: _tabController,
           children: tabList.map((status) {
-            return Container(
+            var notifList = (status == prateAttr) ? pRideList : dRideList;
+            return notifList.length == 0 ? Text(status, textScaleFactor: 5) : Container(
               alignment: Alignment.center,
               child: ListView.builder(
-                itemCount: (status == prateAttr) ? pRideList.length : dRideList.length,
+                itemCount: notifList.length,
                 itemBuilder: (BuildContext context, int index){
                   return Opacity(
                     opacity: 1.0,
@@ -84,19 +88,43 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
                             ListTile(
-                              leading: Icon(Icons.mail, color: appMainColor, size: 30.0,),
-                              title: Text((status == prateAttr) ? (pasWaitText + pRideList[index].did) :
-                                    (dRideList[index].pid + driverReceivedText), style: nameStyle),
+                              leading: Icon(Icons.hail, color: appMainColor, size: 40.0,),
+                              title: Text((status == prateAttr) ? (pasWaitText + notifList[index].did) :
+                                    (notifList[index].pid + driverReceivedText), style: nameStyle),
                               subtitle: Column(
                                 children: <Widget>[
                                   SizedBox(height: smallSpace),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: <Widget>[
+                                      Icon(Icons.person , color: appMainColor, size: 18.0,),
+                                      SizedBox(width: smallSpace),
+                                      //Text(/* p/d 's gender */, style: labelStyle),
+                                      SizedBox(width: smallSpace * 4),
+                                      Icon(Icons.school , color: appMainColor, size: 18.0,),
+                                      SizedBox(width: smallSpace),
+                                      //Text(/* p/d 's dept and grade */, style: labelStyle),
+                                    ],
+                                  ),
+                                  SizedBox(height: smallSpace),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: <Widget>[
                                       Icon(Icons.star, color: appMainColor, size: 18.0,),
                                       SizedBox(width: smallSpace),
-                                      Text((status == prateAttr) ? ((pRideList[index].drate > 0) ? pRideList[index].drate.toString() : '-') :
-                                      ((dRideList[index].prate > 0) ?dRideList[index].prate.toString() : '-'), style: labelStyle),
+                                      Text((status == prateAttr) ? ((notifList[index].drate > 0) ? notifList[index].drate.toString() : '-') :
+                                      ((notifList[index].prate > 0) ? notifList[index].prate.toString() : '-'), style: labelStyle),
+                                    ],
+                                  ),
+                                  SizedBox(height: smallSpace),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Text(notifList[index].s, style: nameStyle),
+                                      SizedBox(width: smallSpace),
+                                      Icon(Icons.arrow_right_alt , color: appMainColor, size: 18.0,),
+                                      SizedBox(width: smallSpace),
+                                      Text(notifList[index].d, style: nameStyle),
                                     ],
                                   ),
                                 ],
@@ -114,8 +142,8 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                       }).toList(),
                                       onChanged: (newValue) {
                                         setState(() => _rating = newValue);
-                                        if(status == prateAttr) pRideList[index].drate = _rating;
-                                        else dRideList[index].prate = _rating;
+                                        if(status == prateAttr) notifList[index].drate = _rating;
+                                        else notifList[index].prate = _rating;
                                       },
                                       value: _rating,
                                       dropdownColor: appBackgroundColor,
@@ -132,12 +160,14 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                 TextButton(
                                   child: Text('Accept', style: labelStyle,),
                                   onPressed: () {
+                                    ScaffoldMessenger.of(context).showSnackBar(accept);
                                   },
                                 ),
                                 const SizedBox(width: 8),
                                 TextButton(
                                   child: Text('Decline', style: labelStyle,),
                                   onPressed: () {
+                                    ScaffoldMessenger.of(context).showSnackBar(decline);
                                   },
                                 ),
                               ],

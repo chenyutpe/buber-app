@@ -78,6 +78,8 @@ class LoginPage extends State<Login> {
             if (!_idValidate && !_pwValidate) {
               // TODO: send {sid: _idController.text, password: _pwController.text} to backend.
               // TODO: Backend return {isLogin: bool, userData: object}.
+              // @post: FormData({sid: _idController.text, password: _pwController.text})
+              // @return: (isLogin) ? userData: Object(FormData?) : message: String
               bool isLogin = true;
               if(isLogin) Navigator.of(context).pushNamed(mainPageTag);
               else ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -95,7 +97,7 @@ class LoginPage extends State<Login> {
         onPressed: () {
           Navigator.of(context).pushNamed(registerTag);
           },
-        child: Text(signUpButtonText, style: labelStyle),
+        child: Text(signUpButtonText, style: textButtonStyle),
       ),
     );
     // 3f

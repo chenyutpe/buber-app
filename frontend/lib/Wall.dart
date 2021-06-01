@@ -63,6 +63,8 @@ class WallPage extends StatefulWidget {
 
 class WallList extends State<WallPage> {
   //TODO: Get driverList from backend
+  //@get: driverList: List<Object>
+
   var newRide = new Ride(userData.sid, '', '', '', 0, -1, -1);
   var numOfList = driverList.length;
   var _start;
@@ -191,6 +193,8 @@ class WallList extends State<WallPage> {
                               _isSelected[index] = true;
                             });
                             //TODO: Send newRide to backend.
+                            //@post: newRide: Object(FormData?)
+                            //@return: message: String
                           },
                         ),
                         const SizedBox(width: 8),

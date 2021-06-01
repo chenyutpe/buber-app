@@ -73,7 +73,18 @@ class ModifiedForm extends State<ModifiedPage> {
   final snackBar = SnackBar(content: Text(uploadImageHintText ));
   var editedData = userData;
   var _gender;
+  /*
   var _status;
+  */
+
+  var be_a_driver;
+
+  @override
+  void initState() {
+    setState(() {
+      be_a_driver = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -186,6 +197,7 @@ class ModifiedForm extends State<ModifiedPage> {
         }
       },
     );
+    /*
     /* 用戶身份 */
     final status = DropdownButtonFormField(
       items: statusList.map((String status) {
@@ -210,6 +222,7 @@ class ModifiedForm extends State<ModifiedPage> {
         labelStyle: labelStyle,
       ),
     );
+    */
     /* 儲存修改按鈕 */
     final saveChangeButton = Padding(
       padding: EdgeInsets.symmetric(vertical: 16.0),
@@ -227,6 +240,7 @@ class ModifiedForm extends State<ModifiedPage> {
         onPressed: () {
           if(_formKey.currentState!.validate()) Navigator.of(context).pushNamed(mainPageTag);
           // TODO: send changes of userData to backend.
+          //@post editedData: Object(FormData?)
 
         },
         //padding: EdgeInsets.all(12),
@@ -234,8 +248,22 @@ class ModifiedForm extends State<ModifiedPage> {
       ),
     );
     /* 上傳圖片 */
+    final beADriver = Visibility(
+      visible: (be_a_driver) ? false : true,
+      child: TextButton(
+        style: ButtonStyle(
+        ),
+        onPressed: () {
+          setState(() {
+            be_a_driver = true;
+          });
+        },
+        child: Text(beADriverButtonText, style: textButtonStyle),
+      ),
+    );
+    /* 上傳照片 */
     final uploadImage = Visibility(
-      visible: (_status == drateAttr && userData.cert == '') ? true : false,
+      visible: (be_a_driver && editedData.cert == '') ? true : false,
       child: TextButton(
         style: ButtonStyle(
         ),
@@ -244,7 +272,7 @@ class ModifiedForm extends State<ModifiedPage> {
           //TODO: Send {cert: image} to backend.
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         },
-        child: Text(uploadImageButtonText, style: labelStyle),
+        child: Text(uploadImageButtonText, style: textButtonStyle),
       ),
     );
 
@@ -266,9 +294,11 @@ class ModifiedForm extends State<ModifiedPage> {
                       Expanded(child: grade,),
                     ],
                   ),
+                  /*
                   SizedBox(height: smallSpace),
                   status,
-                  SizedBox(height: smallSpace),
+                  */
+                  beADriver,
                   uploadImage,
                   saveChangeButton,
                 ],

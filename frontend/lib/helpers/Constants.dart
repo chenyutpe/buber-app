@@ -13,6 +13,11 @@ final labelStyle = TextStyle(
   fontSize: 18.0,
   color: appWhiteColor,
 );
+final textButtonStyle = TextStyle(
+  fontSize: 18.0,
+  color: appWhiteColor,
+    decoration: TextDecoration.underline,
+);
 final hintStyle = TextStyle(
   color: appWhiteColor,
 );
@@ -31,7 +36,8 @@ const pwHintText = "Password";
 const cfHintText = "Confirm password";
 /* ButtonText */
 const loginButtonText = "Login";
-const signUpButtonText = "Sign up now!";
+const signUpButtonText = "Sign up!";
+const beADriverButtonText = "Wanna be a driver?";
 const wallButtonText = "Take a ride!";
 const saveChangeButtonText = "Save changes";
 const uploadImageButtonText = "Upload your bike license!";

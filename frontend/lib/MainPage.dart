@@ -9,6 +9,7 @@ import 'Wall.dart';
 class MainPage extends StatelessWidget {
 
   //TODO: userData from backend
+  //@get: userData: Object(FormData?)
 
     @override
     Widget build(BuildContext context) {

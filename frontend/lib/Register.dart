@@ -70,12 +70,24 @@ class RegisterForm extends State<RegisterPage> {
   final _idController = TextEditingController();
   final _pwController = TextEditingController();
   final _nameController = TextEditingController();
+  /*
   final _deptController = TextEditingController();
   final _gradeController = TextEditingController();
+  */
   final snackBar = SnackBar(content: Text(uploadImageHintText ));
   var newUser = new User('', '', '', '', '', '-', 0, '', -1, -1);
+  /*
   var _gender;
   var _status;
+  */
+  var be_a_driver;
+
+  @override
+  void initState() {
+    setState(() {
+      be_a_driver = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -165,6 +177,7 @@ class RegisterForm extends State<RegisterPage> {
         }
       },
     );
+    /*
     /* 性別 */
     final gender = DropdownButtonFormField(
       items: genderList.map((String gender) {
@@ -269,6 +282,7 @@ class RegisterForm extends State<RegisterPage> {
         labelStyle: labelStyle,
       ),
     );
+    */
     /* 註冊完成按鈕 */
     final saveChangeButton = Padding(
       padding: EdgeInsets.symmetric(vertical: 16.0),
@@ -292,14 +306,30 @@ class RegisterForm extends State<RegisterPage> {
             Navigator.of(context).pushNamed(loginTag);
           }
           // TODO: send newUser to backend.
+          // @post: newUser: Object(FormData?)
+          // @return: message: String
         },
         //padding: EdgeInsets.all(12),
         child: Text(signUpButtonText, style: TextStyle(fontSize: 24.0, color: appBackgroundColor)),
       ),
     );
     /* 上傳照片 */
+    final beADriver = Visibility(
+        visible: (be_a_driver) ? false : true,
+        child: TextButton(
+        style: ButtonStyle(
+        ),
+        onPressed: () {
+          setState(() {
+            be_a_driver = true;
+          });
+        },
+        child: Text(beADriverButtonText, style: textButtonStyle),
+      ),
+    );
+    /* 上傳照片 */
     final uploadImage = Visibility(
-      visible: (_status == drateAttr && userData.cert == '') ? true : false,
+      visible: (be_a_driver) ? true : false,
       child: TextButton(
         style: ButtonStyle(
         ),
@@ -308,7 +338,7 @@ class RegisterForm extends State<RegisterPage> {
           //TODO: Send {cert: image} to backend.
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         },
-        child: Text(uploadImageButtonText, style: labelStyle),
+        child: Text(uploadImageButtonText, style: textButtonStyle),
       ),
     );
 
@@ -326,6 +356,7 @@ class RegisterForm extends State<RegisterPage> {
               SizedBox(height: smallSpace),
               userName,
               SizedBox(height: smallSpace),
+              /*
               gender,
               SizedBox(height: smallSpace),
               Row(
@@ -337,6 +368,8 @@ class RegisterForm extends State<RegisterPage> {
               SizedBox(height: smallSpace),
               status,
               SizedBox(height: smallSpace),
+              */
+              beADriver,
               uploadImage,
               saveChangeButton,
             ],
