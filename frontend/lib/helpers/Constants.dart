@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
 // Test
-var userData = yalee;
+var userData = kong;
+var pRideList = [pRide, pRide];
+var dRideList = [dRide];
+var pList = [yalee, yalee];
+var dList = [yalee, yalee];
 
 // Color
 Color appBackgroundColor = Color.fromRGBO(249, 249, 249, 1.0);
@@ -30,10 +34,10 @@ final nameStyle = TextStyle(fontSize: 24.0, color: appMainColor);
 // String
 /* Title */
 const appTitle = "Buber-Bike";
+const reqTitle = "Request";
 /* HintText */
 const idHintText = "Account ID";
 const pwHintText = "Password";
-const cfHintText = "Confirm password";
 /* ButtonText */
 const loginButtonText = "Login";
 const signUpButtonText = "Sign up!";
@@ -43,20 +47,23 @@ const saveChangeButtonText = "Save changes";
 const chooseImageButtonText = "Upload your bike license!";
 const uploadImageButtonText = "Upload";
 const chooseButtonText = "Choose!";
-const sendButtonText = "Send request";
+const sendButtonText = "Send";
 /* Validator & ErrorText */
 const idIsEmptyText = "Please enter your ID.";
 const pwIsEmptyText = "Please enter your password.";
 const nameIsEmptyText = "Name cannot be empty.";
 const deptIsEmptyText = "Dep. cannot be empty.";
 const gradeIsEmptyText = "Grade cannot be empty.";
+const startIsEmptyText = "Please enter a starting point.";
+const destIsEmptyText = "Please enter a destination.";
 const loginFailedText = "Login failed";
-const confirmFailedText = "Confirm failed";
 /* Alert */
 const logoutAlertTitle = "Logout";
 const logoutAlertText = "Are you sure to logout?";
 const discardAlertTitle = "Discard";
 const discardAlertText = "Are you sure to discard your changes?";
+const declinedAlertTitle = "Decline";
+const declinedAlertText = "Are you sure to decline the request?";
 const disable = '-';
 /* Attribute */
 const nameAttr = "Name";
@@ -67,17 +74,20 @@ const statusAttr = "Status";
 const rateAttr = "Ratings";
 const prateAttr = "Passenger";
 const drateAttr = "Driver";
-const startAttr = "Start";
+const startAttr = "Starting Point";
 const destAttr = "Destination";
 /* Scaffold Message */
 const uploadImageHintText = "You should upload your bike license.";
 const queryHintText = "Query";
 /* Others */
 const driverReceivedText = " needs your help!";
-const driverDeclinedText = " declined the request.";
-const pasWaitText = "Waiting for ";
-const pasAcceptedText = " accepted your request.";
-const pasDeclinedText = " declined your request.";
+const pasWaitText = "Waiting for response...";
+const pasAcceptedText = " accepted the request.";
+const DeclinedText = " declined the request.";
+const driverAcceptedText = "Request from ";
+const FinishedText = "Have a nice day!";
+const chooseLocationText = "Enter a starting point and a destination.";
+const noRequestText = "No request";
 
 // List
 const statusList = [prateAttr, drateAttr];
@@ -85,10 +95,9 @@ const genderList = ['M', 'F', '-'];
 const deptList = [];
 const startList = ['A', 'B', 'C', 'D', 'E'];
 const destList = ['1', '2', '3', '4', '5'];
-const tabList = [prateAttr, drateAttr];
+const tabPList = [prateAttr];
+const tabDList = [prateAttr, drateAttr];
 var driverList = [yalee, tsay, kong, Ayee, kong, kong, kong,];
-var pRideList = [pRide];
-var dRideList = [dRide];
 
 // Pages
 const loginTag = 'Login';
@@ -148,5 +157,5 @@ class Ride {
 
   Ride(this.pid, this.did, this.s, this.d, this.state, this.prate, this.drate);
 }
-var pRide = new Ride(userData.sid, tsay.sid, 'A', '3', 0, -1, -1);
-var dRide = new Ride(tsay.sid, userData.sid, 'D', '2', 0, -1, -1);
+var pRide = new Ride(userData.sid, yalee.sid, 'A', '2', 2, -1, -1);
+var dRide = new Ride(yalee.sid, userData.sid, 'D', '2', 2, -1, -1);

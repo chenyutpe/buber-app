@@ -4,6 +4,7 @@ import 'Login.dart';
 import 'MainPage.dart';
 import 'Register.dart';
 import 'Modified.dart';
+import 'Notification.dart';
 
 void main() {
   runApp(BuberBike());
@@ -30,4 +31,5 @@ final routes = <String, WidgetBuilder>{
   mainPageTag: (context) => MainPage(),
   registerTag: (context) => Register(),
   modifiedTag: (context) => Modified(),
+  notificationTag: (context) => Notif(),
 };

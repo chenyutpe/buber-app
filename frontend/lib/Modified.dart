@@ -321,31 +321,33 @@ class ModifiedForm extends State<ModifiedPage> {
 
     return Form(
           key: _formKey,
-          child: Center(
-            child: Padding(
-              padding: EdgeInsets.only(left: 24.0, right: 24.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  userName,
-                  SizedBox(height: smallSpace),
-                  gender,
-                  SizedBox(height: smallSpace),
-                  Row(
-                    children: <Widget>[
-                      Expanded(child: dept,),
-                      Expanded(child: grade,),
-                    ],
-                  ),
-                  /*
+          child: Scaffold(
+            body: Center(
+              child: Padding(
+                padding: EdgeInsets.only(left: 24.0, right: 24.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    userName,
+                    SizedBox(height: smallSpace),
+                    gender,
+                    SizedBox(height: smallSpace),
+                    Row(
+                      children: <Widget>[
+                        Expanded(child: dept,),
+                        Expanded(child: grade,),
+                      ],
+                    ),
+                    /*
                   SizedBox(height: smallSpace),
                   status,
                   */
-                  beADriver,
-                  chooseImage,
-                  uploadImage,
-                  saveChangeButton,
-                ],
+                    beADriver,
+                    chooseImage,
+                    uploadImage,
+                    saveChangeButton,
+                  ],
+                ),
               ),
             ),
           ),

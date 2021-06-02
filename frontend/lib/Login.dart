@@ -29,6 +29,7 @@ class LoginPage extends State<Login> {
     final account_id = TextFormField(
       controller: _idController,
       keyboardType: TextInputType.text,
+      textInputAction: TextInputAction.next,
       maxLines: 1,
       decoration: InputDecoration(
           hintText: idHintText,
@@ -44,6 +45,7 @@ class LoginPage extends State<Login> {
     final password = TextFormField(
       controller: _pwController,
       keyboardType: TextInputType.text,
+      textInputAction: TextInputAction.next,
       maxLines: 1,
       decoration: InputDecoration(
           hintText: pwHintText,
