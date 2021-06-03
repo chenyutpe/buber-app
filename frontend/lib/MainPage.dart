@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'helpers/Constants.dart';
 import 'dart:developer';
+import 'package:async/async.dart';
+import 'package:http/http.dart' as http;
 import 'Login.dart';
 import 'Modified.dart';
 import 'Notification.dart';
 import 'Wall.dart';
+
+Future<http.Response> fetchAlbum() {
+  return http.get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
+}
 
 class MainPage extends StatelessWidget {
 
