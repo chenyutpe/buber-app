@@ -1,5 +1,6 @@
 from flask import Flask, request
 from flask_cors import CORS
+from flask_bcrypt import Bcrypt
 from connect import Connection
 from bson.objectid import ObjectId
 from bson import json_util
@@ -8,9 +9,10 @@ from bson import json_util
 # initializations
 
 app = Flask(__name__)
-CORS(app)
-
 app.config['SECRET_KEY'] = 'so_secret'
+
+CORS(app)
+bcrypt = Bcrypt(app)
 
 db = Connection()
 
@@ -35,6 +37,8 @@ def register():
     password = request.form['password']
     name = request.form['name']
 
+    # p_hash = bcrypt.generate_password_hash(password).decode('utf-8')
+    # id = db.newUser(sid, p_hash, name)
     id = db.newUser(sid, password, name)
     if id == None:
         return "You have already registered"
@@ -50,6 +54,8 @@ def login():
     sid = request.form['sid']
     password = request.form['password']
 
+    # p_hash = bcrypt.generate_password_hash(password).decode('utf-8')
+    # userdata = db.login(sid, p_hash)
     userdata = db.login(sid, password)
     if userdata == None:
         return "Who are you?"
@@ -170,7 +176,6 @@ def post_cert():
     f = request.files['file']
     t = 'jpg'
     oid = ObjectId(oid)
-
     result = db.uplodeCert(oid, f, t)
     return result
 
