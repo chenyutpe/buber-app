@@ -109,7 +109,7 @@ const notificationTag = 'Notification';
 const wallTag = 'Wall';
 
 // Images
-Image appLogo = Image.asset('assets/images/buber-bike-logo.png');
+Image appLogo = Image.asset('assets/images/buber-bike-logo2.png');
 Image appIcon = Image.asset('assets/icons/icon1.jpg');
 
 // Sizes
