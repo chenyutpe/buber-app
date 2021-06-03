@@ -111,29 +111,31 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                         children: <Widget>[
                           TextButton(
                             child: Text('Decline', style: textButtonStyle,),
-                            onPressed: () =>  AlertDialog(
-                              title: Text(declinedAlertTitle),
-                              content: Text(declinedAlertText),
-                              actions: <Widget>[
-                                TextButton(
-                                  onPressed: () {
-                                    log("Cancel");
-                                    Navigator.pop(context, 'Cancel');
-                                  },
-                                  child: const Text('Cancel'),
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      _state[index] = 3;
-                                      log(_state[index].toString());
-                                    });
-                                  },
-                                  child: const Text('Yes'),
-                                ),
-                              ],
+                            onPressed: () =>  showDialog<String>(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                title: Text(declinedAlertTitle),
+                                content: Text(declinedAlertText),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      log("Cancel");
+                                      Navigator.pop(context, 'Cancel');
+                                    },
+                                    child: const Text('Cancel'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      //TODO: update new state to backend
+                                      //@post: state: 3
+                                      setState(() {
+                                      });
+                                    },
+                                    child: const Text('Yes'),
+                                  ),
+                                ],
+                              ),
                             ),
-
                           ),
                         ],
                       ),
@@ -145,7 +147,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                     children: <Widget>[
                       ListTile(
                         leading: Icon(Icons.hail, color: appMainColor, size: 40.0,),
-                        title: Text(pList[index].name + driverReceivedText, style: nameStyle),
+                        title: Text(pList[index].name + driverReceivedText, style: attrStyle),
                         subtitle: Column(
                           children: <Widget>[
                             SizedBox(height: smallSpace),
@@ -176,11 +178,11 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                Text(notifList[index].s, style: nameStyle),
+                                Text(notifList[index].s, style: attrStyle),
                                 SizedBox(width: smallSpace),
                                 Icon(Icons.arrow_right_alt , color: appMainColor, size: 18.0,),
                                 SizedBox(width: smallSpace),
-                                Text(notifList[index].d, style: nameStyle),
+                                Text(notifList[index].d, style: attrStyle),
                               ],
                             ),
                           ],
@@ -193,15 +195,20 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                             child: Text('Accept', style: textButtonStyle,),
                             onPressed: () {
                               setState(() {
+                                //TODO: update new state to backend
+                                //@post: state: 1
                                 _state[index] = 1;
                                 log(_state[index].toString());
+                                notifList[index].state = _state[index];
                               });
                             },
                           ),
                           SizedBox(width: smallSpace * 3),
                           TextButton(
                             child: Text('Decline', style: textButtonStyle,),
-                            onPressed: () =>  AlertDialog(
+                            onPressed: () =>  showDialog<String>(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
                               title: Text(declinedAlertTitle),
                               content: Text(declinedAlertText),
                               actions: <Widget>[
@@ -215,11 +222,13 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                 TextButton(
                                   onPressed: () {
                                     setState(() {
+
                                     });
                                   },
                                   child: const Text('Yes'),
                                 ),
                               ],
+                            ),
                             ),
                           ),
                         ],
@@ -232,7 +241,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                     children: <Widget>[
                       ListTile(
                         leading: Icon(Icons.hail, color: appMainColor, size: 40.0,),
-                        title: Text(dList[index].name + pasAcceptedText, style: nameStyle),
+                        title: Text(dList[index].name + pasAcceptedText, style: attrStyle),
                         subtitle: Column(
                           children: <Widget>[
                             SizedBox(height: smallSpace),
@@ -263,11 +272,11 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                Text(notifList[index].s, style: nameStyle),
+                                Text(notifList[index].s, style: attrStyle),
                                 SizedBox(width: smallSpace),
                                 Icon(Icons.arrow_right_alt , color: appMainColor, size: 18.0,),
                                 SizedBox(width: smallSpace),
-                                Text(notifList[index].d, style: nameStyle),
+                                Text(notifList[index].d, style: attrStyle),
                               ],
                             ),
                           ],
@@ -280,35 +289,41 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                             child: Text('Finish', style: textButtonStyle,),
                             onPressed: () {
                               setState(() {
+                                //TODO: update new state to backend
+                                //@post: state: 2
                                 _state[index] = 2;
                                 log(_state[index].toString());
+                                notifList[index].state = _state[index];
                               });
                             },
                           ),
                           SizedBox(width: smallSpace * 3),
                           TextButton(
                             child: Text('Decline', style: textButtonStyle,),
-                            onPressed: () =>  AlertDialog(
-                              title: Text(declinedAlertTitle),
-                              content: Text(declinedAlertText),
-                              actions: <Widget>[
-                                TextButton(
-                                  onPressed: () {
-                                    log("Cancel");
-                                    Navigator.pop(context, 'Cancel');
-                                  },
-                                  child: const Text('Cancel'),
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      _state[index] = 4;
-                                      log(_state[index].toString());
-                                    });
-                                  },
-                                  child: const Text('Yes'),
-                                ),
-                              ],
+                            onPressed: () =>  showDialog<String>(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                title: Text(declinedAlertTitle),
+                                content: Text(declinedAlertText),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      log("Cancel");
+                                      Navigator.pop(context, 'Cancel');
+                                    },
+                                    child: const Text('Cancel'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      //TODO: update new state to backend
+                                      //@post: state: 4
+                                      setState(() {
+                                      });
+                                    },
+                                    child: const Text('Yes'),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ],
@@ -321,7 +336,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                     children: <Widget>[
                       ListTile(
                         leading: Icon(Icons.hail, color: appMainColor, size: 40.0,),
-                        title: Text(driverAcceptedText + pList[index].name, style: nameStyle),
+                        title: Text(driverAcceptedText + pList[index].name, style: attrStyle),
                         subtitle: Column(
                           children: <Widget>[
                             SizedBox(height: smallSpace),
@@ -352,11 +367,11 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                Text(notifList[index].s, style: nameStyle),
+                                Text(notifList[index].s, style: attrStyle),
                                 SizedBox(width: smallSpace),
                                 Icon(Icons.arrow_right_alt , color: appMainColor, size: 18.0,),
                                 SizedBox(width: smallSpace),
-                                Text(notifList[index].d, style: nameStyle),
+                                Text(notifList[index].d, style: attrStyle),
                               ],
                             ),
                           ],
@@ -368,27 +383,30 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                           SizedBox(width: smallSpace),
                           TextButton(
                             child: Text('Decline', style: textButtonStyle,),
-                            onPressed: () =>  AlertDialog(
-                              title: Text(declinedAlertTitle),
-                              content: Text(declinedAlertText),
-                              actions: <Widget>[
-                                TextButton(
-                                  onPressed: () {
-                                    log("Cancel");
-                                    Navigator.pop(context, 'Cancel');
-                                  },
-                                  child: const Text('Cancel'),
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      _state[index] = 5;
-                                      log(_state[index].toString());
-                                    });
-                                  },
-                                  child: const Text('Yes'),
-                                ),
-                              ],
+                            onPressed: () =>  showDialog<String>(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                title: Text(declinedAlertTitle),
+                                content: Text(declinedAlertText),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      log("Cancel");
+                                      Navigator.pop(context, 'Cancel');
+                                    },
+                                    child: const Text('Cancel'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      //TODO: update new state to backend
+                                      //@post: state: 5
+                                      setState(() {
+                                      });
+                                    },
+                                    child: const Text('Yes'),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ],
@@ -401,13 +419,13 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                     children: <Widget>[
                       ListTile(
                         leading: Icon(Icons.tag_faces, color: appMainColor, size: 40.0,),
-                        title: Text(FinishedText, style: nameStyle),
+                        title: Text(FinishedText, style:attrStyle),
                         subtitle: Column(
                           children: <Widget>[
                             SizedBox(height: smallSpace),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[Text(dList[index].name, style: labelStyle),],
+                              children: <Widget>[Text(dList[index].name, style: dataStyle),],
                             ),
                             SizedBox(height: smallSpace),
                             Row(
@@ -472,6 +490,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                           TextButton(
                             child: Text('Send', style: textButtonStyle,),
                             onPressed: () {
+                              //TODO: ask backend to delete the request
 
                             },
                           ),
@@ -485,13 +504,13 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                     children: <Widget>[
                       ListTile(
                         leading: Icon(Icons.tag_faces, color: appMainColor, size: 40.0,),
-                        title: Text(FinishedText, style: nameStyle),
+                        title: Text(FinishedText, style: attrStyle),
                         subtitle: Column(
                           children: <Widget>[
                             SizedBox(height: smallSpace),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[Text(pList[index].name, style: labelStyle),],
+                              children: <Widget>[Text(pList[index].name, style: dataStyle),],
                             ),
                             SizedBox(height: smallSpace),
                             Row(
@@ -555,6 +574,8 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                           TextButton(
                             child: Text('Send', style: textButtonStyle,),
                             onPressed: () {
+                              //TODO: ask backend to delete the request
+
                             },
                           ),
                         ],
@@ -567,7 +588,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                     children: <Widget>[
                       ListTile(
                         leading: Icon(Icons.hail, color: appMainColor, size: 40.0,),
-                        title: Text(pList[index].name + DeclinedText, style: nameStyle),
+                        title: Text(pList[index].name + DeclinedText, style: attrStyle),
                         subtitle: Column(
                           children: <Widget>[
                             SizedBox(height: smallSpace),
@@ -632,6 +653,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                           TextButton(
                             child: Text('Send', style: textButtonStyle,),
                             onPressed: () {
+                              //TODO: ask backend to delete the request
 
                             },
                           ),
@@ -645,7 +667,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                     children: <Widget>[
                       ListTile(
                         leading: Icon(Icons.hail, color: appMainColor, size: 40.0,),
-                        title: Text(dList[index].name + DeclinedText, style: nameStyle),
+                        title: Text(dList[index].name + DeclinedText, style: attrStyle),
                         subtitle: Column(
                           children: <Widget>[
                             SizedBox(height: smallSpace),
@@ -710,6 +732,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                           TextButton(
                             child: Text('Send', style: textButtonStyle,),
                             onPressed: () {
+                              //TODO: ask backend to delete the request
                             },
                           ),
                         ],
@@ -720,9 +743,9 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                   var notAccepted = [notAccepted_p, notAccepted_d];
                   var Accepted = [Accepted_p, Accepted_d];
                   var Finished = [Finished_p, Finished_d];
-                  var DeclinedBeforeAccepted = [notAccepted_p, notAccepted_p];
-                  var DeclinedByP = [notAccepted_p, DeclinedByP_d];
-                  var DeclinedByD= [DeclinedByD_p, notAccepted_p];
+                  var DeclinedBeforeAccepted = [Text('state3'), Text('state3')];
+                  var DeclinedByP = [Text('state4'), DeclinedByP_d];
+                  var DeclinedByD= [DeclinedByD_p, Text('state5')];
 
                   var cardList = [
                     notAccepted, Accepted, Finished, DeclinedBeforeAccepted, DeclinedByP, DeclinedByD,

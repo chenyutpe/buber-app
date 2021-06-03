@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 // Test
-var userData = kong;
-var pRideList = [pRide, pRide];
+var userData = manchen;
+var pRideList = [pRide];
 var dRideList = [dRide];
-var pList = [yalee, yalee];
-var dList = [yalee, yalee];
+var pList = [yalee];
+var dList = [tsay];
 
 // Color
 Color appBackgroundColor = Color.fromRGBO(249, 249, 249, 1.0);
@@ -30,6 +30,8 @@ final underlineStyle = UnderlineInputBorder(
 );
 final titleStyle = TextStyle(fontSize: 24.0, color: appBackgroundColor);
 final nameStyle = TextStyle(fontSize: 24.0, color: appMainColor);
+final attrStyle = TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold, color: appWhiteColor);
+final dataStyle = TextStyle(fontSize: 18.0, color: appWhiteColor);
 
 // String
 /* Title */
@@ -40,13 +42,12 @@ const idHintText = "Account ID";
 const pwHintText = "Password";
 /* ButtonText */
 const loginButtonText = "Login";
-const signUpButtonText = "Sign up!";
+const signUpButtonText = "Sign up";
 const beADriverButtonText = "Wanna be a driver?";
 const wallButtonText = "Take a ride!";
 const saveChangeButtonText = "Save changes";
 const chooseImageButtonText = "Upload your bike license!";
 const uploadImageButtonText = "Upload";
-const chooseButtonText = "Choose!";
 const sendButtonText = "Send";
 /* Validator & ErrorText */
 const idIsEmptyText = "Please enter your ID.";
@@ -157,5 +158,6 @@ class Ride {
 
   Ride(this.pid, this.did, this.s, this.d, this.state, this.prate, this.drate);
 }
-var pRide = new Ride(userData.sid, yalee.sid, 'A', '2', 2, -1, -1);
-var dRide = new Ride(yalee.sid, userData.sid, 'D', '2', 2, -1, -1);
+var pRide = new Ride(userData.sid, tsay.sid, 'A', '2', 1, -1, -1);
+// var pRide = new Ride(userData.sid, tsay.sid, 'B', '3', 1, -1, -1);
+var dRide = new Ride(yalee.sid, userData.sid, 'D', '2', 0, -1, -1);

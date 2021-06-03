@@ -310,35 +310,36 @@ class RegisterForm extends State<RegisterPage> {
     );
     */
     /* 註冊完成按鈕 */
-    final saveChangeButton = Padding(
-      padding: EdgeInsets.symmetric(vertical: 16.0),
-      child: ElevatedButton(
-        style: ButtonStyle(
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(24),
+    final saveChangeButton = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Icon(Icons.app_registration , color: appMainColor, size: 24.0,),
+        SizedBox(width: smallSpace),
+          Padding(
+          padding: EdgeInsets.symmetric(vertical: 16.0),
+          child: TextButton(
+              style: ButtonStyle(
+
+            ),
+              onPressed: () {
+              if(_formKey.currentState!.validate()) {
+              log("Debuging");
+              log("name " + newUser.name);
+              log("dept " + newUser.dept);
+              log("gender " + newUser.gender);
+              Navigator.of(context).pushNamed(loginTag);
+              }
+              // TODO: send newUser to backend.
+              // @post: newUser: Object(FormData?)
+              // @return: message: String
+            },
+            //padding: EdgeInsets.all(12),
+             child: Text(signUpButtonText, style: nameStyle),
             ),
           ),
-          padding: MaterialStateProperty.all<EdgeInsets>(
-              EdgeInsets.all(12)),
-          backgroundColor: MaterialStateProperty.all<Color>(appMainColor),
-        ),
-        onPressed: () {
-          if(_formKey.currentState!.validate()) {
-            log("Debuging");
-            log("name " + newUser.name);
-            log("dept " + newUser.dept);
-            log("gender " + newUser.gender);
-            Navigator.of(context).pushNamed(loginTag);
-          }
-          // TODO: send newUser to backend.
-          // @post: newUser: Object(FormData?)
-          // @return: message: String
-        },
-        //padding: EdgeInsets.all(12),
-        child: Text(signUpButtonText, style: TextStyle(fontSize: 24.0, color: appBackgroundColor)),
-      ),
+      ],
     );
+
     /* 上傳照片 */
     final beADriver = Visibility(
         visible: (be_a_driver) ? false : true,

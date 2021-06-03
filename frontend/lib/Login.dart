@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'helpers/Constants.dart';
+import 'MainPage.dart';
+import 'Register.dart';
 
 // 登入頁。輸入帳號(sid)、密碼(password)以登入。
 // 點擊『註冊』後進入[Register]。
@@ -124,3 +126,8 @@ class LoginPage extends State<Login> {
     );
   }
 }
+
+final routes = <String, WidgetBuilder>{
+  mainPageTag: (context) => MainPage(),
+  registerTag: (context) => Register(),
+};

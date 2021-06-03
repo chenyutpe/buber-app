@@ -82,8 +82,6 @@ class MainPage extends StatelessWidget {
 class Profile extends StatelessWidget {
 
   //TODO: userData from backend
-  var attrStyle = TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold, color: appWhiteColor);
-  var dataStyle = TextStyle(fontSize: 18.0, color: appWhiteColor);
 
   @override
   Widget build(BuildContext context) {

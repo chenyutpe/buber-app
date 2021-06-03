@@ -252,28 +252,30 @@ class ModifiedForm extends State<ModifiedPage> {
     );
     */
     /* 儲存修改按鈕 */
-    final saveChangeButton = Padding(
-      padding: EdgeInsets.symmetric(vertical: 16.0),
-      child: ElevatedButton(
-        style: ButtonStyle(
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(24),
-            ),
-          ),
-          padding: MaterialStateProperty.all<EdgeInsets>(
-              EdgeInsets.all(12)),
-          backgroundColor: MaterialStateProperty.all<Color>(appMainColor),
-        ),
-        onPressed: () {
-          if(_formKey.currentState!.validate()) Navigator.of(context).pushNamed(mainPageTag);
-          // TODO: send changes of userData to backend.
-          //@post editedData: Object(FormData?)
+    final saveChangeButton = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Icon(Icons.app_registration , color: appMainColor, size: 24.0,),
+        SizedBox(width: smallSpace),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 16.0),
+          child: TextButton(
+            style: ButtonStyle(
 
-        },
-        //padding: EdgeInsets.all(12),
-        child: Text(saveChangeButtonText, style: TextStyle(fontSize: 24.0, color: appBackgroundColor)),
-      ),
+            ),
+            onPressed: () {
+              if(_formKey.currentState!.validate()) {
+                Navigator.of(context).pushNamed(mainPageTag);
+              }
+              // TODO: send newUser to backend.
+              // @post: newUser: Object(FormData?)
+              // @return: message: String
+            },
+            //padding: EdgeInsets.all(12),
+            child: Text(saveChangeButtonText, style: nameStyle),
+          ),
+        ),
+      ],
     );
     /* 上傳圖片 */
     final beADriver = Visibility(
@@ -338,6 +340,7 @@ class ModifiedForm extends State<ModifiedPage> {
                         Expanded(child: grade,),
                       ],
                     ),
+                    SizedBox(height: smallSpace),
                     /*
                   SizedBox(height: smallSpace),
                   status,
