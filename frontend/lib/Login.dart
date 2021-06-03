@@ -1,13 +1,35 @@
 import 'package:flutter/material.dart';
 import 'helpers/Constants.dart';
-import 'package:async/async.dart';
+import 'dart:developer';
+import 'dart:async';
+import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'MainPage.dart';
 import 'Register.dart';
+const url = 'http://127.0.0.1:5000';
 
 // 登入頁。輸入帳號(sid)、密碼(password)以登入。
 // 點擊『註冊』後進入[Register]。
 // 點擊『登入』後，將(sid)(password)傳回後端，若登入成功則進入[MainPage]。
+
+Future<http.Response> sendLoginData(user) async {
+  log("fetchData");
+  log(user["sid"].toString());
+  log(user["password"].toString());
+  var userEncoded = json.encode(user);
+  var res =  await http.post(url + "/login", body: userEncoded , headers: <String, String>{
+    "Accept": "application/json"
+  },);
+  log(res.toString());
+  if (res.statusCode == 201) {
+    log("sucess");
+    return res;
+  } else {
+    log("error");
+    throw Exception('Failed to create user.');
+  }
+}
+
 
 class Login extends StatefulWidget{
   LoginPage createState()=> LoginPage();
@@ -20,6 +42,7 @@ class LoginPage extends State<Login> {
   final snackBar = SnackBar(content: Text(loginFailedText));
   bool _idValidate = false;
   bool _pwValidate = false;
+  var user = {"sid": '', "password": ''};
 
   @override
   Widget build(BuildContext context) {
@@ -86,6 +109,11 @@ class LoginPage extends State<Login> {
               // TODO: Backend return {isLogin: bool, userData: object}.
               // @post: FormData({sid: _idController.text, password: _pwController.text})
               // @return: (isLogin) ? userData: Object(FormData?) : message: String
+              user["sid"] = _idController.text;
+              user["password"] = _pwController.text;
+              log(user["sid"].toString());
+              log(user["password"].toString());
+              sendLoginData(user);
               bool isLogin = true;
               if(isLogin) Navigator.of(context).pushNamed(mainPageTag);
               else ScaffoldMessenger.of(context).showSnackBar(snackBar);

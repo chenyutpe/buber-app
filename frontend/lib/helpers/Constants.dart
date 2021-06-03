@@ -38,7 +38,7 @@ final dataStyle = TextStyle(fontSize: 18.0, color: appWhiteColor);
 const appTitle = "Buber-Bike";
 const reqTitle = "Request";
 /* HintText */
-const idHintText = "Account ID";
+const idHintText = "Student ID";
 const pwHintText = "Password";
 /* ButtonText */
 const loginButtonText = "Login";

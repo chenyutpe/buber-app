@@ -8,10 +8,6 @@ import 'Modified.dart';
 import 'Notification.dart';
 import 'Wall.dart';
 
-Future<http.Response> fetchAlbum() {
-  return http.get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
-}
-
 class MainPage extends StatelessWidget {
 
   //TODO: userData from backend
