@@ -4,11 +4,11 @@ import '../models/Ride.dart';
 
 // Test
 
-var userData = kong;
-var pRideList = [pRide];
-var dRideList = [dRide];
-var pList = [yalee];
-var dList = [tsay];
+var userData;
+List<Ride> pRideList = [];
+var dRideList = [];
+var pList = [];
+var dList = [];
 
 
 //Url
@@ -126,7 +126,7 @@ const buttonHeight = 24.0;
 
 // User
 
-class User {
+class User_text {
   var sid;
   var name;
   var password;
@@ -138,19 +138,19 @@ class User {
   double prate;
   double drate;
 
-  User(this.sid, this.name, this.password, this.dept, this.grade, this.gender,
+  User_text(this.sid, this.name, this.password, this.dept, this.grade, this.gender,
       this.is_driver, this.cert, this.prate, this.drate);
 }
 
-var manchen = new User('manchen', '曼成', '005', 'IM', '3', 'F', 0, '', 3.0, -1);
-var yalee = new User('yalee', '雅麗', 'CSwoman', 'IM', 'P', 'F', 1, '', 4.0, 3.0);
-var tsay = new User('tsay', '益坤', 'algorithm', 'IM', 'P', 'M', 1, '', 2.0, 1.0);
-var kong = new User('kong', '令傑', 'thinking', 'IM', 'P', 'M', 1, '', 3.5, 5.0);
-var Ayee = new User('Ayee', '阿姨', 'statistics', 'IM', 'P', 'F', 1, '', 2.5, 3.0);
+var manchen = new User_text('manchen', '曼成', '005', 'IM', '3', 'F', 0, '', 3.0, -1);
+var yalee = new User_text('yalee', '雅麗', 'CSwoman', 'IM', 'P', 'F', 1, '', 4.0, 3.0);
+var tsay = new User_text('tsay', '益坤', 'algorithm', 'IM', 'P', 'M', 1, '', 2.0, 1.0);
+var kong = new User_text('kong', '令傑', 'thinking', 'IM', 'P', 'M', 1, '', 3.5, 5.0);
+var Ayee = new User_text('Ayee', '阿姨', 'statistics', 'IM', 'P', 'F', 1, '', 2.5, 3.0);
 
 // Ride
 
-class Ride {
+class Ride_text {
   var pid;
   var did;
   var s;
@@ -159,9 +159,9 @@ class Ride {
   double prate;
   double drate;
 
-  Ride(this.pid, this.did, this.s, this.d, this.state, this.prate, this.drate);
+  Ride_text(this.pid, this.did, this.s, this.d, this.state, this.prate, this.drate);
 }
 
-var pRide = new Ride(userData.sid, tsay.sid, 'A', '2', 1, -1, -1);
-var dRide = new Ride(yalee.sid, userData.sid, 'D', '2', 0, -1, -1);
+var pRide = new Ride_text(userData.sid, tsay.sid, 'A', '2', 1, -1, -1);
+var dRide = new Ride_text(yalee.sid, userData.sid, 'D', '2', 0, -1, -1);
 

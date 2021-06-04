@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'helpers/Constants.dart';
-//import 'models/User.dart';
+import 'models/User.dart';
 import 'dart:developer';
 import 'dart:async';
 import 'package:http/http.dart' as http;
@@ -16,8 +16,6 @@ class MainPage extends StatelessWidget {
 
     @override
     Widget build(BuildContext context) {
-
-      final userData = ModalRoute.of(context)!.settings.arguments as User;
 
       final parag = FractionallySizedBox(
         alignment: Alignment.centerLeft,
@@ -74,7 +72,7 @@ class MainPage extends StatelessWidget {
             child: Text(gradeAttr, textAlign: TextAlign.center, style: attrStyle,),
           ),
           Expanded(
-            child: Text(userData.grade, textAlign: TextAlign.center, style: dataStyle,),
+            child: Text(userData.grade.toString(), textAlign: TextAlign.center, style: dataStyle,),
           ),
         ],
       );
@@ -146,7 +144,10 @@ class MainPage extends StatelessWidget {
           ),
           onPressed: () {
             log("Navigate to Wall.");
-            Navigator.of(context).pushNamed(wallTag);
+            Navigator.push(context, new MaterialPageRoute(
+              builder: (context) => new Wall())
+            );
+
           },
           child: Text(wallButtonText, style: TextStyle(fontSize: 24.0, color: appBackgroundColor)),
         ),
@@ -190,7 +191,7 @@ class MainPage extends StatelessWidget {
               Padding(
                   padding: EdgeInsets.only(right: 24.0),
                   child: GestureDetector(
-                    onTap: () => Navigator.of(context).pushNamed(notificationTag),
+                    onTap: () => Navigator.push(context, new MaterialPageRoute(builder: (context) => new Notif() ) ),
                     child: Icon(
                       Icons.notifications,
                       color: appMainColor,
@@ -202,10 +203,7 @@ class MainPage extends StatelessWidget {
                   padding: EdgeInsets.only(right: 24.0),
                   child: GestureDetector(
                     onTap: () {
-
-                      Navigator.of(context).pushNamed(modifiedTag,
-                          arguments: userData
-                        );
+                      Navigator.push(context, new MaterialPageRoute(builder: (context) => new Modified() ) );
                       },
                     child: Icon(
                         Icons.edit,

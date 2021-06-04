@@ -8,23 +8,6 @@ import 'dart:developer';
 import 'helpers/Constants.dart';
 import 'Login.dart';
 
-Future<http.Response> sendRegisterData(newUser) async {
-  log(newUser["sid"].toString());
-  log(newUser["password"].toString());
-  log(newUser["name"].toString());
-  var newUserEncoded = json.encode(newUser);
-  var res =  await http.post(url + "/register", body: newUserEncoded , headers: {
-  },);
-  log(res.toString());
-  log(res.statusCode.toString());
-  if (res.statusCode == 200) {
-    log("success");
-    return res;
-  } else {
-    log("error");
-    throw Exception('Failed to create user.');
-  }
-}
 
 class Register extends StatelessWidget {
   @override
@@ -339,11 +322,32 @@ class RegisterForm extends State<RegisterPage> {
               style: ButtonStyle(
 
             ),
-              onPressed: () {
+              onPressed: () async {
               if(_formKey.currentState!.validate()) {
                 log("Debuging");
-                sendRegisterData(newUser);
-                Navigator.of(context).pushNamed(loginTag);
+                log(newUser["sid"].toString());
+                log(newUser["password"].toString());
+                log(newUser["name"].toString());
+                var newUserEncoded = json.encode(newUser);
+                var res =  await http.post(url + "/register", body: newUserEncoded , headers: <String, String>{
+                  'Content-Type': 'application/json; charset=UTF-8',
+                },);
+                log(res.toString());
+                log(res.statusCode.toString());
+                if (res.statusCode == 200) {
+                  if(res.body == "Register success") {
+                    log("success");
+                    Navigator.of(context).pushNamed(loginTag);
+                  }
+                  else {
+                    log("register failed");
+
+                  }
+                } else {
+                  log("error");
+                  throw Exception('Failed to create user.');
+                }
+
               }
               // TODO: send newUser to backend.
               // @post: newUser: Object(FormData?)

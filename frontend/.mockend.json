@@ -1,0 +1,12 @@
+{
+  "sid": "string",
+  "password": "string",
+  "name": "string",
+  "dept": "string",
+  "grade": "string",
+  "gender": "string",
+  "is_driver": "int",
+  "cert": "string",
+  "prate": "int",
+  "drate": "int"
+}

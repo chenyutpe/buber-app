@@ -9,27 +9,6 @@ import 'dart:developer';
 import 'helpers/Constants.dart';
 import 'MainPage.dart';
 
-Future<http.Response> sendEditedData(editedUser) async {
-  log(editedUser["sid"].toString());
-  log(editedUser["password"].toString());
-  log(editedUser["name"].toString());
-  log(editedUser["dept"].toString());
-  log(editedUser["grade"].toString());
-  log(editedUser["gender"].toString());
-  var editedUserEncoded = json.encode(editedUser);
-  var res =  await http.post(url /* + '/' */, body: editedUserEncoded , headers: {
-  },);
-  log(res.toString());
-  log(res.statusCode.toString());
-  if (res.statusCode == 200) {
-    log("success");
-    return res;
-  } else {
-    log("error");
-    throw Exception('Failed to edit data.');
-  }
-}
-
 class Modified extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -90,8 +69,9 @@ class ModifiedPage extends StatefulWidget {
 }
 
 class ModifiedForm extends State<ModifiedPage> {
+
+  var editedUser = {'id': userData.id, 'name': '' , 'dept': '' , 'grade': '' , 'gender': ''};
   final _formKey = GlobalKey<FormState>();
-  var editedUser = {"sid": '', "password": '', 'name': '' , 'dept': '' , 'grade': '' , 'gender': ''};
   var _gender;
   var _isChosen;
   /*
@@ -135,9 +115,10 @@ class ModifiedForm extends State<ModifiedPage> {
   Widget build(BuildContext context) {
     // Build a Form widget using the _formKey created above.
     //final editedUser = ModalRoute.of(context)!.settings.arguments as User;
-    final _nameController = TextEditingController(text: editedUser['name']);
-    final _deptController = TextEditingController(text: editedUser['dept']);
-    final _gradeController = TextEditingController(text: editedUser['grade']);
+
+    final _nameController = TextEditingController(text: editedUser['name'].toString());
+    final _deptController = TextEditingController(text: editedUser['dept'].toString());
+    final _gradeController = TextEditingController(text: editedUser['grade'].toString());
     final snackBar = SnackBar(content: Text(uploadImageHintText ));
 
     /* 暱稱 */
@@ -286,10 +267,36 @@ class ModifiedForm extends State<ModifiedPage> {
             style: ButtonStyle(
 
             ),
-            onPressed: () {
+            onPressed: () async {
               if(_formKey.currentState!.validate()) {
-                sendEditedData(editedUser);
-                Navigator.of(context).pushNamed(mainPageTag);
+                log(editedUser["id"].toString());
+                log(editedUser["name"].toString());
+                log(editedUser["dept"].toString());
+                log(editedUser["grade"].toString());
+                log(editedUser["gender"].toString());
+                var editedUserEncoded = json.encode(editedUser);
+                var res =  await http.post(url + '/profile', body: editedUserEncoded , headers: <String, String>{
+                  'Content-Type': 'application/json; charset=UTF-8',
+                  },);
+                log(res.toString());
+                log(res.statusCode.toString());
+                if (res.statusCode == 200) {
+                  var isEdited = res.body;
+                  if(isEdited == "true") {
+                    log("success");
+                    var getData = await http.get(url + '/users/' + userData.id , headers: <String, String>{
+                      'Content-Type': 'application/json; charset=UTF-8',
+                    },);
+                    userData = User.fromJson(jsonDecode(getData.body));
+                    Navigator.of(context).pushNamed(mainPageTag);
+                  }
+                  else {
+                    log("edit failed");
+                  }
+                } else {
+                  log("error");
+                  throw Exception('Failed to edit data.');
+                }
               }
               // TODO: send newUser to backend.
               // @post: newUser: Object(FormData?)

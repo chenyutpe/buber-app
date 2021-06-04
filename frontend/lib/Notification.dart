@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'helpers/Constants.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'models/Ride.dart';
 import 'dart:developer';
 import 'MainPage.dart';
 import 'Wall.dart';
@@ -12,10 +15,27 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
   //TODO: Get RideList from backend.
   //@get: pRideList: List<Object>, dRideList: List<Object>
 
-  late TabController _tabController;
-  var tabList = ( userData.is_driver == 0 ) ? tabPList : tabDList;
-  var _rating = List.filled((pRideList.length > dRideList.length ) ? pRideList.length : dRideList.length, 1.0);
-  var _state = List.filled((pRideList.length > dRideList.length ) ? pRideList.length : dRideList.length, 0);
+  Future<List<Ride>> getRide() async {
+    for(var i = 0; i < pList.length; i++) {
+      var res = await http.get(url + '/rides/' + pList[i], headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },);
+      log("p ride data: " + res.body);
+      var r = Ride.fromJson(jsonDecode(res.body));
+      log(r.toString());
+      pRideList.add(r);
+      log(pRideList[0].toString());
+    }
+    for(var i = 0; i < dList.length; i++) {
+      var res = await http.get(url + '/rides/' + dList[i], headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },);
+      log("d ride data: " + res.body);
+      var r = Ride.fromJson(jsonDecode(res.body));
+      dRideList.add(r);
+      log(dRideList[0]);
+    }
+  }
 
   @override
   void initState() {
@@ -29,9 +49,16 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
+  late TabController _tabController;
+  var tabList = ( userData.is_driver == 0 ) ? tabPList : tabDList;
+  var _rating = List.filled((pRideList.length > dRideList.length ) ? pRideList.length : dRideList.length, 1.0);
+  var _state = List.filled((pRideList.length > dRideList.length ) ? pRideList.length : dRideList.length, 0);
+
   @override
   Widget build(BuildContext context) {
-
+    log("Enter notificaion");
+    getRide();
+    log(pRideList.length.toString());
     return MaterialApp(
       title: mainPageTag,
       home: Scaffold(
@@ -67,11 +94,12 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
           ),
         ),
         body: TabBarView(
-          controller: _tabController,
-          children: tabList.map((status) {
+                controller: _tabController,
+                children: tabList.map((status) {
             var _status = (status == prateAttr) ? 0 : 1;
             var notifList = (status == prateAttr) ? pRideList : dRideList;
-
+            log("ListView Builder");
+            log(notifList[0]);
             return notifList.length == 0 ?
              Center(
               child: Text(noRequestText, textScaleFactor: 3),
