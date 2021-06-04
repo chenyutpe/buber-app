@@ -92,6 +92,8 @@ def get_ride(id):
     oid = ObjectId(id)
 
     ride_data = db.getRequestData(oid)
+    ride_data['p_data'] = db.getUserData(ride_data['pid'])
+    ride_data['d_data'] = db.getUserData(ride_data['did'])
     if ride_data == None:
         return 'failed'
     return json_encode(ride_data)
@@ -102,6 +104,10 @@ def search():
     d = request.json['d']
 
     searched_rides = list(db.search(s,d))
+
+    for ride_data in searched_rides:
+        ride_data['p_data'] = db.getUserData(ride_data['pid'])
+        ride_data['d_data'] = db.getUserData(ride_data['did'])
     return json_encode(searched_rides)
 
 @app.route('/take', methods=['POST'])
