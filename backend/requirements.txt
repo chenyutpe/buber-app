@@ -1,7 +1,6 @@
 Flask
 Flask-Cors
 Flask-Bcrypt
-json
 python-dotenv
 pymongo
 pymongo[srv]
