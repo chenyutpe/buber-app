@@ -167,7 +167,7 @@ def set_profile():
     grade = int(grade)
 
     result = db.editProfile(oid, name, dept, grade, gender)
-    return result
+    return json_encode(result)
 
 @app.route('/cert', methods=['POST'])
 def post_cert():
