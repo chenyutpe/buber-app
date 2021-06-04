@@ -33,9 +33,9 @@ def register():
     @req: FormData({sid: str, password: str, name: str})
     @res: message: str
     """
-    sid = request.form['sid']
-    password = request.form['password']
-    name = request.form['name']
+    sid = request.json['sid']
+    password = request.json['password']
+    name = request.json['name']
 
     # p_hash = bcrypt.generate_password_hash(password).decode('utf-8')
     # id = db.newUser(sid, p_hash, name)
@@ -51,8 +51,8 @@ def login():
     @req: FormData({sid: str, password: str})
     @res: userdata: json
     """
-    sid = request.form['sid']
-    password = request.form['password']
+    sid = request.json['sid']
+    password = request.json['password']
 
     # p_hash = bcrypt.generate_password_hash(password).decode('utf-8')
     # userdata = db.login(sid, p_hash)
@@ -73,9 +73,9 @@ def get_user(id):
 
 @app.route('/call', methods=['POST'])
 def call():
-    pid = request.form['pid']
-    s = request.form['s']
-    d = request.form['d']
+    pid = request.json['pid']
+    s = request.json['s']
+    d = request.json['d']
 
     pid = ObjectId(pid)
     call_oid = db.newRequest(pid, s, d)
@@ -93,16 +93,16 @@ def get_ride(id):
 
 @app.route('/search', methods=['GET'])
 def search():
-    s = request.form['s']
-    d = request.form['d']
+    s = request.json['s']
+    d = request.json['d']
 
     searched_rides = list(db.search(s,d))
     return json_encode(searched_rides)
 
 @app.route('/take', methods=['POST'])
 def take():
-    oid = request.form['oid']
-    did = request.form['did']
+    oid = request.json['oid']
+    did = request.json['did']
 
     oid = ObjectId(oid)
     did = ObjectId(did)
@@ -115,8 +115,8 @@ def take():
 
 @app.route('/cancel', methods=['POST'])
 def cancel():
-    oid = request.form['oid']
-    id = request.form['id']
+    oid = request.json['oid']
+    id = request.json['id']
     
     oid = ObjectId(oid)
     id = ObjectId(id)
@@ -126,8 +126,8 @@ def cancel():
 
 @app.route('/finish', methods=['POST'])
 def finish():
-    oid = request.form['oid']
-    id = request.form['id']
+    oid = request.json['oid']
+    id = request.json['id']
 
     oid = ObjectId(oid)
     id = ObjectId(id)
@@ -137,9 +137,9 @@ def finish():
 
 @app.route('/review', methods=['POST'])
 def review():
-    oid = request.form['oid']
-    id = request.form['id']
-    rate = request.form['rate']
+    oid = request.json['oid']
+    id = request.json['id']
+    rate = request.json['rate']
 
     oid = ObjectId(oid)
     id = ObjectId(id)
@@ -150,18 +150,18 @@ def review():
 
 @app.route('/set_driver', methods=['POST'])
 def set_driver():
-    oid = request.form['oid']
+    oid = request.json['oid']
     oid = ObjectId(oid)
     result = db.setDriver(oid)
     return json_encode(result)
 
 @app.route('/profile', methods=['POST'])
 def set_profile():
-    oid = request.form['oid']
-    name = request.form['name']
-    dept = request.form['dept']
-    grade = request.form['grade']
-    gender = request.form['gender']
+    oid = request.json['oid']
+    name = request.json['name']
+    dept = request.json['dept']
+    grade = request.json['grade']
+    gender = request.json['gender']
 
     oid = ObjectId(oid)
     grade = int(grade)
@@ -172,7 +172,7 @@ def set_profile():
 @app.route('/cert', methods=['POST'])
 def post_cert():
     # not sure if this works
-    oid = request.form['oid']
+    oid = request.json['oid']
     f = request.files['file']
     t = 'jpg'
     oid = ObjectId(oid)
