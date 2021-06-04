@@ -157,7 +157,7 @@ def set_driver():
 
 @app.route('/profile', methods=['POST'])
 def set_profile():
-    oid = request.json['oid']
+    oid = request.json['id']
     name = request.json['name']
     dept = request.json['dept']
     grade = request.json['grade']
