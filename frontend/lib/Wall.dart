@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'helpers/Constants.dart';
+import 'models/User.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'MainPage.dart';
 import 'Notification.dart';
 import 'dart:developer';
@@ -15,7 +18,7 @@ class Wall extends StatelessWidget {
           backgroundColor: appBackgroundColor,
           title: Text(reqTitle, style: TextStyle(fontSize: 24.0, color: appMainColor)),
           leading: GestureDetector(
-            onTap: (){Navigator.of(context).pushNamed(loginTag);},
+            onTap: (){Navigator.of(context).pushNamed(mainPageTag);},
             child: Icon(
               Icons.arrow_back,
               color: appMainColor,
@@ -50,7 +53,7 @@ class WallPage extends StatefulWidget {
 
 class WallList extends State<WallPage> {
 
-  var newRide = new Ride(userData.sid, '', '', '', 0, -1, -1);
+  var newRide = {'pid': userData.id, 's': '', 'd': ''};
   final _formKey = GlobalKey<FormState>();
   final _startController = TextEditingController();
   final _destController = TextEditingController();
@@ -89,7 +92,7 @@ class WallList extends State<WallPage> {
                                 }
                                 else {
                                   log("Save start");
-                                  newRide.s = value;
+                                  newRide['s'] = value;
                                   return null;
                                 }
                               },
@@ -116,7 +119,7 @@ class WallList extends State<WallPage> {
                                 }
                                 else {
                                   log("Save dest");
-                                  newRide.d = value;
+                                  newRide['d'] = value;
                                   return null;
                                 }
                               },
@@ -135,8 +138,26 @@ class WallList extends State<WallPage> {
                         TextButton(
                           style: ButtonStyle(
                           ),
-                          onPressed: () {
-                            if(_formKey.currentState!.validate()) Navigator.of(context).pushNamed(notificationTag);
+                          onPressed: () async {
+                            if(_formKey.currentState!.validate()) {
+                              log(newRide["pid"].toString());
+                              log(newRide["s"].toString());
+                              log(newRide["d"].toString());
+                              var newRideEncoded = json.encode(newRide);
+                              var res =  await http.post(url + '/call', body: newRideEncoded , headers: <String, String>{
+                                'Content-Type': 'application/json; charset=UTF-8',
+                              },);
+                              log(res.statusCode.toString());
+                              if (res.statusCode == 200) {
+                                  pList.add(res.body);
+                                  log("Ride id: " + pList[0]);
+                                  log("success");
+                                  Navigator.of(context).pushNamed(notificationTag);
+                              } else {
+                                log("error");
+                                throw Exception('Failed to call.');
+                              }
+                            }
                           },
                           child: Text(sendButtonText, style: nameStyle),
                         ),

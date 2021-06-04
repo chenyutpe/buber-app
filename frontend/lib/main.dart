@@ -28,8 +28,8 @@ class BuberBike extends StatelessWidget {
 
 final routes = <String, WidgetBuilder>{
   loginTag: (context) => Login(),
-  //mainPageTag: (context) => MainPage(),
-  //registerTag: (context) => Register(),
+  mainPageTag: (context) => MainPage(),
+  registerTag: (context) => Register(),
   //modifiedTag: (context) => Modified(),
   //notificationTag: (context) => Notif(),
 };

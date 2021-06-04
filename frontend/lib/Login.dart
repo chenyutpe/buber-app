@@ -92,23 +92,31 @@ class LoginPage extends State<Login> {
               // @return: (isLogin) ? userData: Object(FormData?) : message: String
               user["sid"] = _idController.text;
               user["password"] = _pwController.text;
-              log("fetchData");
               log(user["sid"].toString());
               log(user["password"].toString());
               var userEncoded = json.encode(user);
-              var res =  await http.post(url + "/login", body: userEncoded , headers: {
+              var res =  await http.post(url + "/login", body: userEncoded , headers: <String, String> {
+                'Content-Type': 'application/json; charset=UTF-8',
               },);
 
               log(res.body.toString());
               log(res.statusCode.toString());
               if(res.statusCode == 200) {
-                /* var u = User.fromJson(jsonDecode(res.body)); */
-                log("success");
-                Navigator.of(context).pushNamed(mainPageTag, /*arguments: u*/);
+                log("return ok");
+                if(res.body == "Who are you?") {
+                  log("login failed");
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                }
+                else {
+                  log("success");
+                  var u = User.fromJson(jsonDecode(res.body));
+                  log("return data " + u.id);
+                  userData = u;
+                  Navigator.of(context).pushNamed(mainPageTag, arguments: u);
+                }
               }
               else {
                 log("error");
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
               }
             }
           },
