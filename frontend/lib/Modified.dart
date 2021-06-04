@@ -1,16 +1,39 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'dart:convert';
-import 'package:async/async.dart';
+import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'models/User.dart';
 import 'dart:developer';
 import 'helpers/Constants.dart';
 import 'MainPage.dart';
 
+Future<http.Response> sendEditedData(editedUser) async {
+  log(editedUser["sid"].toString());
+  log(editedUser["password"].toString());
+  log(editedUser["name"].toString());
+  log(editedUser["dept"].toString());
+  log(editedUser["grade"].toString());
+  log(editedUser["gender"].toString());
+  var editedUserEncoded = json.encode(editedUser);
+  var res =  await http.post(url /* + '/' */, body: editedUserEncoded , headers: {
+  },);
+  log(res.toString());
+  log(res.statusCode.toString());
+  if (res.statusCode == 200) {
+    log("success");
+    return res;
+  } else {
+    log("error");
+    throw Exception('Failed to edit data.');
+  }
+}
+
 class Modified extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       title: modifiedTag,
       theme: new ThemeData(
@@ -68,11 +91,7 @@ class ModifiedPage extends StatefulWidget {
 
 class ModifiedForm extends State<ModifiedPage> {
   final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController(text: userData.name);
-  final _deptController = TextEditingController(text: userData.dept);
-  final _gradeController = TextEditingController(text: userData.grade);
-  final snackBar = SnackBar(content: Text(uploadImageHintText ));
-  var editedData = userData;
+  var editedUser = {"sid": '', "password": '', 'name': '' , 'dept': '' , 'grade': '' , 'gender': ''};
   var _gender;
   var _isChosen;
   /*
@@ -104,8 +123,6 @@ class ModifiedForm extends State<ModifiedPage> {
     });
   }
 
-
-
   @override
   void initState() {
     setState(() {
@@ -117,6 +134,12 @@ class ModifiedForm extends State<ModifiedPage> {
   @override
   Widget build(BuildContext context) {
     // Build a Form widget using the _formKey created above.
+    //final editedUser = ModalRoute.of(context)!.settings.arguments as User;
+    final _nameController = TextEditingController(text: editedUser['name']);
+    final _deptController = TextEditingController(text: editedUser['dept']);
+    final _gradeController = TextEditingController(text: editedUser['grade']);
+    final snackBar = SnackBar(content: Text(uploadImageHintText ));
+
     /* 暱稱 */
     final userName = TextFormField(
       controller: _nameController,
@@ -140,7 +163,7 @@ class ModifiedForm extends State<ModifiedPage> {
         }
         else {
           log("Save name");
-          editedData.name = value;
+          editedUser['name'] = value;
           return null;
         }
       },
@@ -157,7 +180,7 @@ class ModifiedForm extends State<ModifiedPage> {
       onChanged: (newValue) {
         log("Save gender");
         setState(() => _gender = newValue);
-        editedData.gender = _gender;
+        editedUser['gender'] = _gender;
       },
       value: _gender,
       dropdownColor: appBackgroundColor,
@@ -192,7 +215,7 @@ class ModifiedForm extends State<ModifiedPage> {
         }
         else {
           log("Save dept");
-          editedData.dept = value;
+          editedUser['dept'] = value;
           return null;
         }
       },
@@ -220,7 +243,7 @@ class ModifiedForm extends State<ModifiedPage> {
         }
         else {
           log("Save grade");
-          editedData.grade = value;
+          editedUser['grade'] = value;
           return null;
         }
       },
@@ -265,6 +288,7 @@ class ModifiedForm extends State<ModifiedPage> {
             ),
             onPressed: () {
               if(_formKey.currentState!.validate()) {
+                sendEditedData(editedUser);
                 Navigator.of(context).pushNamed(mainPageTag);
               }
               // TODO: send newUser to backend.
@@ -293,7 +317,7 @@ class ModifiedForm extends State<ModifiedPage> {
     );
     /* 上傳照片 */
     final chooseImage = Visibility(
-      visible: (be_a_driver && editedData.cert == '') ? true : false,
+      visible: (be_a_driver && editedUser['cert'] == '') ? true : false,
       child: TextButton(
         style: ButtonStyle(
         ),
@@ -307,7 +331,7 @@ class ModifiedForm extends State<ModifiedPage> {
       ),
     );
     final uploadImage = Visibility(
-      visible: (_isChosen && editedData.cert == '') ? true : false,
+      visible: (_isChosen && editedUser['cert'] == '') ? true : false,
       child: TextButton(
         style: ButtonStyle(
         ),

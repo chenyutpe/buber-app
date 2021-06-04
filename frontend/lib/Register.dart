@@ -1,11 +1,30 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
+import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'dart:developer';
 import 'helpers/Constants.dart';
 import 'Login.dart';
+
+Future<http.Response> sendRegisterData(newUser) async {
+  log(newUser["sid"].toString());
+  log(newUser["password"].toString());
+  log(newUser["name"].toString());
+  var newUserEncoded = json.encode(newUser);
+  var res =  await http.post(url + "/register", body: newUserEncoded , headers: {
+  },);
+  log(res.toString());
+  log(res.statusCode.toString());
+  if (res.statusCode == 200) {
+    log("success");
+    return res;
+  } else {
+    log("error");
+    throw Exception('Failed to create user.');
+  }
+}
 
 class Register extends StatelessWidget {
   @override
@@ -75,7 +94,7 @@ class RegisterForm extends State<RegisterPage> {
   final _gradeController = TextEditingController();
   */
   final snackBar = SnackBar(content: Text(uploadImageHintText ));
-  var newUser = new User('', '', '', '', '', '-', 0, '', -1, -1);
+  var newUser = {"sid": '', "password": '', 'name': ''};
   /*
   var _gender;
   var _status;
@@ -88,8 +107,7 @@ class RegisterForm extends State<RegisterPage> {
   final String nodeEndPoint = '';
 
   void _choose() async {
-    file = await ImagePicker.pickImage(source: ImageSource.camera);
-// file = await ImagePicker.pickImage(source: ImageSource.gallery);
+    file = await ImagePicker.pickImage(source: ImageSource.gallery);
   }
 
   void _upload() {
@@ -141,7 +159,7 @@ class RegisterForm extends State<RegisterPage> {
         }
         else {
           log("Set id.");
-          newUser.sid = value;
+          newUser['sid'] = value;
           return null;
         }
       },
@@ -170,7 +188,7 @@ class RegisterForm extends State<RegisterPage> {
         }
         else {
           log("Set password.");
-          newUser.password = value;
+          newUser['password'] = value;
           return null;
         }
       },
@@ -198,7 +216,7 @@ class RegisterForm extends State<RegisterPage> {
         }
         else {
           log("Set name.");
-          newUser.name = value;
+          newUser['name'] = value;
           return null;
         }
       },
@@ -323,11 +341,9 @@ class RegisterForm extends State<RegisterPage> {
             ),
               onPressed: () {
               if(_formKey.currentState!.validate()) {
-              log("Debuging");
-              log("name " + newUser.name);
-              log("dept " + newUser.dept);
-              log("gender " + newUser.gender);
-              Navigator.of(context).pushNamed(loginTag);
+                log("Debuging");
+                sendRegisterData(newUser);
+                Navigator.of(context).pushNamed(loginTag);
               }
               // TODO: send newUser to backend.
               // @post: newUser: Object(FormData?)
