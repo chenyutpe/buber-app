@@ -100,8 +100,9 @@ def get_ride(id):
 
 @app.route('/search', methods=['GET'])
 def search():
-    s = request.json['s']
-    d = request.json['d']
+    # No loc for now
+    s = ''
+    d = ''
 
     searched_rides = list(db.search(s,d))
 
