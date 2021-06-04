@@ -1,3 +1,8 @@
+import 'User.dart';
+import 'dart:convert';
+
+//var empty = new User();
+
 class Ride {
   final String id;
   final String pid;
@@ -5,7 +10,9 @@ class Ride {
   final String s;
   final String d;
   final int state;
+  final User p_data;
   final double prate;
+  final User d_data;
   final double drate;
 
   Ride({
@@ -16,11 +23,13 @@ class Ride {
     required this.d,
     required this.state,
     required this.prate,
-    required this.drate
+    required this.p_data,
+    required this.drate,
+    required this.d_data,
   });
 
   factory Ride.fromJson(Map<String, dynamic> json){
-    if(json['did'] == null) {
+    if(json['did'] == null && json['d_data'] == null) {
       return new Ride(
         id: json['_id']['\$oid'],
         pid: json['pid']['\$oid'],
@@ -29,7 +38,9 @@ class Ride {
         d: json['d'],
         state: json ['state'],
         prate: json['prate'],
+        p_data: User.fromJson(json['p_data']),
         drate: json['drate'],
+        d_data: User.empty(),
       );
     }
       else{
@@ -41,7 +52,9 @@ class Ride {
         d: json['d'],
         state: json ['state'],
         prate: json['prate'],
+        p_data: User.fromJson(json['p_data']),
         drate: json['drate'],
+        d_data: User.fromJson(json['d_data']),
       );
     }
 
