@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
+import '../models/User.dart';
+import '../models/Ride.dart';
 
 // Test
-var userData = manchen;
+
+var userData = kong;
 var pRideList = [pRide];
 var dRideList = [dRide];
 var pList = [yalee];
 var dList = [tsay];
+
+
+//Url
+const url = 'http://127.0.0.1:5000';
 
 // Color
 Color appBackgroundColor = Color.fromRGBO(249, 249, 249, 1.0);
@@ -98,7 +105,7 @@ const startList = ['A', 'B', 'C', 'D', 'E'];
 const destList = ['1', '2', '3', '4', '5'];
 const tabPList = [prateAttr];
 const tabDList = [prateAttr, drateAttr];
-var driverList = [yalee, tsay, kong, Ayee, kong, kong, kong,];
+// var driverList = [yalee, tsay, kong, Ayee, kong, kong, kong,];
 
 // Pages
 const loginTag = 'Login';
@@ -118,6 +125,7 @@ const smallSpace = 5.0;
 const buttonHeight = 24.0;
 
 // User
+
 class User {
   var sid;
   var name;
@@ -134,16 +142,11 @@ class User {
       this.is_driver, this.cert, this.prate, this.drate);
 }
 
-var manchen = new User('manchen', '曼成', '005', 'IM', '3', 'F',
-    0, '', 3.0, -1);
-var yalee = new User('yalee', '雅麗', 'CSwoman', 'IM', 'P', 'F',
-                  1, '', 4.0, 3.0);
-var tsay = new User('tsay', '益坤', 'algorithm', 'IM', 'P', 'M',
-    1, '', 2.0, 1.0);
-var kong = new User('kong', '令傑', 'thinking', 'IM', 'P', 'M',
-    1, '', 3.5, 5.0);
-var Ayee = new User('Ayee', '阿姨', 'statistics', 'IM', 'P', 'F',
-    1, '', 2.5, 3.0);
+var manchen = new User('manchen', '曼成', '005', 'IM', '3', 'F', 0, '', 3.0, -1);
+var yalee = new User('yalee', '雅麗', 'CSwoman', 'IM', 'P', 'F', 1, '', 4.0, 3.0);
+var tsay = new User('tsay', '益坤', 'algorithm', 'IM', 'P', 'M', 1, '', 2.0, 1.0);
+var kong = new User('kong', '令傑', 'thinking', 'IM', 'P', 'M', 1, '', 3.5, 5.0);
+var Ayee = new User('Ayee', '阿姨', 'statistics', 'IM', 'P', 'F', 1, '', 2.5, 3.0);
 
 // Ride
 
@@ -158,6 +161,7 @@ class Ride {
 
   Ride(this.pid, this.did, this.s, this.d, this.state, this.prate, this.drate);
 }
+
 var pRide = new Ride(userData.sid, tsay.sid, 'A', '2', 1, -1, -1);
-// var pRide = new Ride(userData.sid, tsay.sid, 'B', '3', 1, -1, -1);
 var dRide = new Ride(yalee.sid, userData.sid, 'D', '2', 0, -1, -1);
+

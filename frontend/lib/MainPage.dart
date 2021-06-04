@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'helpers/Constants.dart';
+//import 'models/User.dart';
 import 'dart:developer';
-import 'package:async/async.dart';
+import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'Login.dart';
 import 'Modified.dart';
@@ -15,6 +16,142 @@ class MainPage extends StatelessWidget {
 
     @override
     Widget build(BuildContext context) {
+
+      final userData = ModalRoute.of(context)!.settings.arguments as User;
+
+      final parag = FractionallySizedBox(
+        alignment: Alignment.centerLeft,
+        widthFactor: 0.1,
+        child: Container(
+          height: smallSpace,
+          color: appMainColor,
+        ),
+      );
+
+      final userName = Row(
+        children: <Widget>[
+          Expanded(
+            child: Text(nameAttr, textAlign: TextAlign.left, style: attrStyle,),
+          ),
+          Expanded(
+            child: Text(userData.name, textAlign: TextAlign.center, style: dataStyle,),
+          ),
+          Expanded(
+            child: Text("", textAlign: TextAlign.center, style: attrStyle,),
+          ),
+          Expanded(
+            child: Text("", textAlign: TextAlign.center, style: dataStyle,),
+          ),
+        ],
+      );
+      // 3a
+      final gender = Row(
+        children: <Widget>[
+          Expanded(
+            child: Text(genderAttr, textAlign: TextAlign.left, style: attrStyle,),
+          ),
+          Expanded(
+            child: Text(userData.gender, textAlign: TextAlign.center, style: dataStyle,),
+          ),
+          Expanded(
+            child: Text("", textAlign: TextAlign.center, style: attrStyle,),
+          ),
+          Expanded(
+            child: Text("", textAlign: TextAlign.center, style: dataStyle,),
+          ),
+        ],
+      );
+
+      final studentDept = Row(
+        children: <Widget>[
+          Expanded(
+            child: Text(deptAttr, textAlign: TextAlign.left, style: attrStyle,),
+          ),
+          Expanded(
+            child: Text(userData.dept, textAlign: TextAlign.center, style: dataStyle,),
+          ),
+          Expanded(
+            child: Text(gradeAttr, textAlign: TextAlign.center, style: attrStyle,),
+          ),
+          Expanded(
+            child: Text(userData.grade, textAlign: TextAlign.center, style: dataStyle,),
+          ),
+        ],
+      );
+
+      final status = Row(
+        children: <Widget>[
+          Expanded(
+            child: Text(statusAttr, textAlign: TextAlign.left, style: attrStyle,),
+          ),
+          Expanded(
+            child: Text(statusList[userData.is_driver], textAlign: TextAlign.center, style: dataStyle,),
+          ),
+          Expanded(
+            child: Text("", textAlign: TextAlign.center, style: attrStyle,),
+          ),
+          Expanded(
+            child: Text("", textAlign: TextAlign.center, style: attrStyle,),
+          ),
+        ],
+      );
+
+      final ratingsTitle = Row(
+        children: <Widget>[
+          Expanded(
+            child: Text(rateAttr, textAlign: TextAlign.left, style: attrStyle,),
+          ),
+          Expanded(
+            child: Text("P", textAlign: TextAlign.center, style: dataStyle,),
+          ),
+          Expanded(
+            child: Text((userData.prate < 0) ? disable : userData.prate.toString(), textAlign: TextAlign.center, style: dataStyle,),
+          ),
+          Expanded(
+            child: Text("", textAlign: TextAlign.center, style: dataStyle,),
+          ),
+        ],
+
+      );
+
+      final ratings = Row(
+        children: <Widget>[
+          Expanded(
+            child: Text("", textAlign: TextAlign.center, style: dataStyle,),
+          ),
+          Expanded(
+            child: Text("D", textAlign: TextAlign.center, style: dataStyle,),
+          ),
+          Expanded(
+            child: Text((userData.drate < 0) ? disable : userData.drate.toString(), textAlign: TextAlign.center, style: dataStyle,),
+          ),
+          Expanded(
+            child: Text("", textAlign: TextAlign.center, style: dataStyle,),
+          ),
+        ],
+
+      );
+      final wallButton = Padding(
+        padding: EdgeInsets.symmetric(vertical: 16.0),
+        child: ElevatedButton(
+          style: ButtonStyle(
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(24),
+              ),
+            ),
+            padding: MaterialStateProperty.all<EdgeInsets>(
+                EdgeInsets.all(12)),
+            backgroundColor: MaterialStateProperty.all<Color>(appMainColor),
+          ),
+          onPressed: () {
+            log("Navigate to Wall.");
+            Navigator.of(context).pushNamed(wallTag);
+          },
+          child: Text(wallButtonText, style: TextStyle(fontSize: 24.0, color: appBackgroundColor)),
+        ),
+      );
+
       return MaterialApp(
         title: mainPageTag,
         home: Scaffold(
@@ -64,7 +201,12 @@ class MainPage extends StatelessWidget {
               Padding(
                   padding: EdgeInsets.only(right: 24.0),
                   child: GestureDetector(
-                    onTap: () => Navigator.of(context).pushNamed(modifiedTag),
+                    onTap: () {
+
+                      Navigator.of(context).pushNamed(modifiedTag,
+                          arguments: userData
+                        );
+                      },
                     child: Icon(
                         Icons.edit,
                         color: appMainColor,
@@ -74,181 +216,38 @@ class MainPage extends StatelessWidget {
               ),
             ],
           ),
-          body: Profile(),
+          body: Scaffold(
+            backgroundColor: appBackgroundColor,
+            body: Center(
+              child: ListView(
+                shrinkWrap: true,
+                padding: EdgeInsets.only(left: 24.0, right: 24.0),
+                children: <Widget>[
+                  parag,
+                  SizedBox(height: smallSpace * 3),
+                  userName,
+                  SizedBox(height: smallSpace),
+                  gender,
+                  SizedBox(height: smallSpace),
+                  studentDept,
+                  SizedBox(height: smallSpace * 3),
+                  parag,
+                  SizedBox(height: smallSpace * 3),
+                  status,
+                  SizedBox(height: smallSpace),
+                  ratingsTitle,
+                  SizedBox(height: smallSpace),
+                  ratings,
+                  SizedBox(height: smallSpace * 3),
+                  wallButton,
+                ],
+              ),
+            ),
+          ),
         ),
         routes: routes,
       );
     }
-}
-
-class Profile extends StatelessWidget {
-
-  //TODO: userData from backend
-
-  @override
-  Widget build(BuildContext context) {
-
-    final parag = FractionallySizedBox(
-      alignment: Alignment.centerLeft,
-      widthFactor: 0.1,
-      child: Container(
-        height: smallSpace,
-        color: appMainColor,
-      ),
-    );
-
-    final userName = Row(
-      children: <Widget>[
-        Expanded(
-          child: Text(nameAttr, textAlign: TextAlign.left, style: attrStyle,),
-        ),
-        Expanded(
-          child: Text(userData.name, textAlign: TextAlign.center, style: dataStyle,),
-        ),
-        Expanded(
-          child: Text("", textAlign: TextAlign.center, style: attrStyle,),
-        ),
-        Expanded(
-          child: Text("", textAlign: TextAlign.center, style: dataStyle,),
-        ),
-      ],
-    );
-    // 3a
-    final gender = Row(
-      children: <Widget>[
-        Expanded(
-          child: Text(genderAttr, textAlign: TextAlign.left, style: attrStyle,),
-        ),
-        Expanded(
-          child: Text(userData.gender, textAlign: TextAlign.center, style: dataStyle,),
-        ),
-        Expanded(
-          child: Text("", textAlign: TextAlign.center, style: attrStyle,),
-        ),
-        Expanded(
-          child: Text("", textAlign: TextAlign.center, style: dataStyle,),
-        ),
-      ],
-    );
-
-    final studentDept = Row(
-      children: <Widget>[
-        Expanded(
-          child: Text(deptAttr, textAlign: TextAlign.left, style: attrStyle,),
-        ),
-        Expanded(
-          child: Text(userData.dept, textAlign: TextAlign.center, style: dataStyle,),
-        ),
-        Expanded(
-          child: Text(gradeAttr, textAlign: TextAlign.center, style: attrStyle,),
-        ),
-        Expanded(
-          child: Text(userData.grade, textAlign: TextAlign.center, style: dataStyle,),
-        ),
-      ],
-    );
-
-    final status = Row(
-      children: <Widget>[
-        Expanded(
-          child: Text(statusAttr, textAlign: TextAlign.left, style: attrStyle,),
-        ),
-        Expanded(
-          child: Text(statusList[userData.is_driver], textAlign: TextAlign.center, style: dataStyle,),
-        ),
-        Expanded(
-          child: Text("", textAlign: TextAlign.center, style: attrStyle,),
-        ),
-        Expanded(
-          child: Text("", textAlign: TextAlign.center, style: attrStyle,),
-        ),
-      ],
-    );
-
-    final ratingsTitle = Row(
-      children: <Widget>[
-        Expanded(
-          child: Text(rateAttr, textAlign: TextAlign.left, style: attrStyle,),
-        ),
-        Expanded(
-          child: Text("P", textAlign: TextAlign.center, style: dataStyle,),
-        ),
-        Expanded(
-          child: Text((userData.prate < 0) ? disable : userData.prate.toString(), textAlign: TextAlign.center, style: dataStyle,),
-        ),
-        Expanded(
-          child: Text("", textAlign: TextAlign.center, style: dataStyle,),
-        ),
-      ],
-
-    );
-
-    final ratings = Row(
-      children: <Widget>[
-        Expanded(
-          child: Text("", textAlign: TextAlign.center, style: dataStyle,),
-        ),
-        Expanded(
-          child: Text("D", textAlign: TextAlign.center, style: dataStyle,),
-        ),
-        Expanded(
-          child: Text((userData.drate < 0) ? disable : userData.drate.toString(), textAlign: TextAlign.center, style: dataStyle,),
-        ),
-        Expanded(
-          child: Text("", textAlign: TextAlign.center, style: dataStyle,),
-        ),
-      ],
-
-    );
-    final wallButton = Padding(
-      padding: EdgeInsets.symmetric(vertical: 16.0),
-      child: ElevatedButton(
-        style: ButtonStyle(
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(24),
-            ),
-          ),
-          padding: MaterialStateProperty.all<EdgeInsets>(
-              EdgeInsets.all(12)),
-          backgroundColor: MaterialStateProperty.all<Color>(appMainColor),
-        ),
-        onPressed: () {
-          log("Navigate to Wall.");
-          Navigator.of(context).pushNamed(wallTag);
-        },
-        child: Text(wallButtonText, style: TextStyle(fontSize: 24.0, color: appBackgroundColor)),
-      ),
-    );
-    return Scaffold(
-      backgroundColor: appBackgroundColor,
-      body: Center(
-        child: ListView(
-          shrinkWrap: true,
-          padding: EdgeInsets.only(left: 24.0, right: 24.0),
-          children: <Widget>[
-            parag,
-            SizedBox(height: smallSpace * 3),
-            userName,
-            SizedBox(height: smallSpace),
-            gender,
-            SizedBox(height: smallSpace),
-            studentDept,
-            SizedBox(height: smallSpace * 3),
-            parag,
-            SizedBox(height: smallSpace * 3),
-            status,
-            SizedBox(height: smallSpace),
-            ratingsTitle,
-            SizedBox(height: smallSpace),
-            ratings,
-            SizedBox(height: smallSpace * 3),
-            wallButton,
-          ],
-        ),
-      ),
-    );
-  }
 }
 
 final routes = <String, WidgetBuilder> {

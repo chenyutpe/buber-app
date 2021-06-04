@@ -1,35 +1,16 @@
 import 'package:flutter/material.dart';
 import 'helpers/Constants.dart';
+import 'models/User.dart';
 import 'dart:developer';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'MainPage.dart';
 import 'Register.dart';
-const url = 'http://127.0.0.1:5000';
 
 // 登入頁。輸入帳號(sid)、密碼(password)以登入。
 // 點擊『註冊』後進入[Register]。
 // 點擊『登入』後，將(sid)(password)傳回後端，若登入成功則進入[MainPage]。
-
-Future<http.Response> sendLoginData(user) async {
-  log("fetchData");
-  log(user["sid"].toString());
-  log(user["password"].toString());
-  var userEncoded = json.encode(user);
-  var res =  await http.post(url + "/login", body: userEncoded , headers: <String, String>{
-    "Accept": "application/json"
-  },);
-  log(res.toString());
-  if (res.statusCode == 201) {
-    log("sucess");
-    return res;
-  } else {
-    log("error");
-    throw Exception('Failed to create user.');
-  }
-}
-
 
 class Login extends StatefulWidget{
   LoginPage createState()=> LoginPage();
@@ -99,7 +80,7 @@ class LoginPage extends State<Login> {
               EdgeInsets.all(12)),
             backgroundColor: MaterialStateProperty.all<Color>(appMainColor),
         ),
-        onPressed: () {
+        onPressed: () async {
           setState((){
             _idValidate = _idController.text.isEmpty;
             _pwValidate = _pwController.text.isEmpty;}
@@ -111,12 +92,24 @@ class LoginPage extends State<Login> {
               // @return: (isLogin) ? userData: Object(FormData?) : message: String
               user["sid"] = _idController.text;
               user["password"] = _pwController.text;
+              log("fetchData");
               log(user["sid"].toString());
               log(user["password"].toString());
-              sendLoginData(user);
-              bool isLogin = true;
-              if(isLogin) Navigator.of(context).pushNamed(mainPageTag);
-              else ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              var userEncoded = json.encode(user);
+              var res =  await http.post(url + "/login", body: userEncoded , headers: {
+              },);
+
+              log(res.body.toString());
+              log(res.statusCode.toString());
+              if(res.statusCode == 200) {
+                /* var u = User.fromJson(jsonDecode(res.body)); */
+                log("success");
+                Navigator.of(context).pushNamed(mainPageTag, /*arguments: u*/);
+              }
+              else {
+                log("error");
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              }
             }
           },
         child: Text(loginButtonText, style: titleStyle),
