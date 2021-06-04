@@ -4,7 +4,7 @@ from flask_bcrypt import Bcrypt
 from connect import Connection
 from bson.objectid import ObjectId
 from bson import json_util
-
+import json
 
 # initializations
 
@@ -26,7 +26,8 @@ def json_encode(data):
 @app.route('/test')
 def test():
     d = list(db._getUsers())
-    return json_encode(d)
+    r = list(db._getReqs())
+    return json_encode([d, r])
 
 @app.route('/')
 def index():
@@ -84,8 +85,7 @@ def call():
 
     pid = ObjectId(pid)
     call_oid = db.newRequest(pid, s, d)
-    
-    return json_encode(call_oid)['$oid']
+    return json.loads(json_encode(call_oid))['$oid']
 
 @app.route('/rides/<id>', methods=['GET'])
 def get_ride(id):
