@@ -23,6 +23,11 @@ def json_encode(data):
 
 # routers
 
+@app.route('/test')
+def test():
+    d = list(db._getUsers())
+    return json_encode(d)
+
 @app.route('/')
 def index():
     return "This is entry"
@@ -80,7 +85,7 @@ def call():
     pid = ObjectId(pid)
     call_oid = db.newRequest(pid, s, d)
     
-    return json_encode(call_oid)
+    return json_encode(call_oid)['$oid']
 
 @app.route('/rides/<id>', methods=['GET'])
 def get_ride(id):
