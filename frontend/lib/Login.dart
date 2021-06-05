@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'helpers/Constants.dart';
 import 'models/User.dart';
 import 'dart:developer';
-import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'MainPage.dart';
-import 'Register.dart';
 
 // 登入頁。輸入帳號(sid)、密碼(password)以登入。
 // 點擊『註冊』後進入[Register]。
@@ -40,12 +37,12 @@ class LoginPage extends State<Login> {
       textInputAction: TextInputAction.next,
       maxLines: 1,
       decoration: InputDecoration(
-          hintText: idHintText,
-          errorText: _idValidate ? idIsEmptyText : null,
-          contentPadding: EdgeInsets.fromLTRB(15.0, 10.0, 10.0, 0.0),
-          enabledBorder: underlineStyle,
-          focusedBorder: underlineStyle,
-          hintStyle: hintStyle,
+        hintText: idHintText,
+        errorText: _idValidate ? idIsEmptyText : null,
+        contentPadding: EdgeInsets.fromLTRB(15.0, 10.0, 10.0, 0.0),
+        enabledBorder: underlineStyle,
+        focusedBorder: underlineStyle,
+        hintStyle: hintStyle,
       ),
       style: labelStyle,
     );
@@ -56,12 +53,12 @@ class LoginPage extends State<Login> {
       textInputAction: TextInputAction.next,
       maxLines: 1,
       decoration: InputDecoration(
-          hintText: pwHintText,
-          errorText: _pwValidate ? pwIsEmptyText : null,
-          contentPadding: EdgeInsets.fromLTRB(15.0, 10.0, 10.0, 0.0),
-          enabledBorder: underlineStyle,
-          focusedBorder: underlineStyle,
-          hintStyle: hintStyle,
+        hintText: pwHintText,
+        errorText: _pwValidate ? pwIsEmptyText : null,
+        contentPadding: EdgeInsets.fromLTRB(15.0, 10.0, 10.0, 0.0),
+        enabledBorder: underlineStyle,
+        focusedBorder: underlineStyle,
+        hintStyle: hintStyle,
       ),
       obscureText: true,
       style: labelStyle,
@@ -71,55 +68,55 @@ class LoginPage extends State<Login> {
       padding: EdgeInsets.symmetric(vertical: 16.0),
       child: ElevatedButton(
         style: ButtonStyle(
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(24),
-              ),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(24),
             ),
-            padding: MaterialStateProperty.all<EdgeInsets>(
+          ),
+          padding: MaterialStateProperty.all<EdgeInsets>(
               EdgeInsets.all(12)),
-            backgroundColor: MaterialStateProperty.all<Color>(appMainColor),
+          backgroundColor: MaterialStateProperty.all<Color>(appMainColor),
         ),
         onPressed: () async {
           setState((){
             _idValidate = _idController.text.isEmpty;
             _pwValidate = _pwController.text.isEmpty;}
-            );
-            if (!_idValidate && !_pwValidate) {
-              // TODO: send {sid: _idController.text, password: _pwController.text} to backend.
-              // TODO: Backend return {isLogin: bool, userData: object}.
-              // @post: FormData({sid: _idController.text, password: _pwController.text})
-              // @return: (isLogin) ? userData: Object(FormData?) : message: String
-              user["sid"] = _idController.text;
-              user["password"] = _pwController.text;
-              // log(user["sid"].toString());
-              // log(user["password"].toString());
-              var userEncoded = json.encode(user);
-              var res =  await http.post(url + "/login", body: userEncoded , headers: <String, String> {
-                'Content-Type': 'application/json; charset=UTF-8',
-              },);
+          );
+          if (!_idValidate && !_pwValidate) {
+            // TODO: send {sid: _idController.text, password: _pwController.text} to backend.
+            // TODO: Backend return {isLogin: bool, userData: object}.
+            // @post: FormData({sid: _idController.text, password: _pwController.text})
+            // @return: (isLogin) ? userData: Object(FormData?) : message: String
+            user["sid"] = _idController.text;
+            user["password"] = _pwController.text;
+            // log(user["sid"].toString());
+            // log(user["password"].toString());
+            var userEncoded = json.encode(user);
+            var res =  await http.post(url + "/login", body: userEncoded , headers: <String, String> {
+              'Content-Type': 'application/json; charset=UTF-8',
+            },);
 
-              // log(res.body.toString());
-              // log(res.statusCode.toString());
-              if(res.statusCode == 200) {
-                // log("return ok");
-                if(res.body == "Who are you?") {
-                  log("login failed");
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                }
-                else {
-                  log("login success");
-                  var u = User.fromJson(jsonDecode(res.body));
-                  log("user id: " + u.id);
-                  userData = u;
-                  Navigator.of(context).pushNamed(mainPageTag, arguments: u);
-                }
+            // log(res.body.toString());
+            // log(res.statusCode.toString());
+            if(res.statusCode == 200) {
+              // log("return ok");
+              if(res.body == "Who are you?") {
+                log("login failed");
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
               }
               else {
-                log("error");
+                log("login success");
+                var u = User.fromJson(jsonDecode(res.body));
+                log("user id: " + u.id);
+                userData = u;
+                Navigator.of(context).pushNamedAndRemoveUntil(mainPageTag, (Route<dynamic> route) => false, arguments: u);
               }
             }
-          },
+            else {
+              log("error");
+            }
+          }
+        },
         child: Text(loginButtonText, style: titleStyle),
       ),
     );
@@ -131,7 +128,7 @@ class LoginPage extends State<Login> {
         ),
         onPressed: () {
           Navigator.of(context).pushNamed(registerTag);
-          },
+        },
         child: Text(signUpButtonText, style: textButtonStyle),
       ),
     );
@@ -157,8 +154,8 @@ class LoginPage extends State<Login> {
     );
   }
 }
-
-final routes = <String, WidgetBuilder>{
-  mainPageTag: (context) => MainPage(),
-  registerTag: (context) => Register(),
-};
+//
+// final routes = <String, WidgetBuilder>{
+//   mainPageTag: (context) => MainPage(),
+//   registerTag: (context) => Register(),
+// };
