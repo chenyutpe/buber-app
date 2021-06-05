@@ -4,8 +4,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'models/Ride.dart';
 import 'dart:developer';
-import 'MainPage.dart';
-import 'Wall.dart';
 
 class Notif extends StatefulWidget {
   NotifPage createState() => new NotifPage();
@@ -120,7 +118,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                         ),
                       )
                   ),
-                  // This mat make routing messy
+                  // This may make routing messy
                   // Padding(
                   //     padding: EdgeInsets.only(right: 24.0),
                   //     child: GestureDetector(
@@ -352,16 +350,6 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                             else {
                                             log("error");
                                             }
-                                            var r = jsonDecode(res.body);
-                                            if(res != null) {
-                                              driverRideId = r["_id"]["\$oid"];
-                                              // log("return id: " + r["_id"]["\$oid"]);
-                                              log("driverRideId: " + driverRideId);
-                                              // log("set state");
-                                            }
-                                            setState(() {
-                                              // _dontFetch = false;
-                                            });
                                           }, //notifList[index].state = _stateDriver[index];
                                         ),
                                       ],
@@ -443,9 +431,6 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                             else {
                                               log("error");
                                             }
-                                            setState(() {
-                                              // _dontFetch = false;
-                                            });
                                           },
                                         ),
                                         SizedBox(width: smallSpace * 3),
@@ -479,7 +464,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                                         log("cancel ride failed");
                                                       }
                                                       else {
-                                                        log("take success");
+                                                        log("cancel success");
                                                         setState(() {
                                                           _future = getRide();
                                                         });
@@ -488,10 +473,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                                     else {
                                                       log("error");
                                                     }
-                                                    setState(() {
-                                                      // _dontFetch = false;
-                                                    });
-                                                    Navigator.pop(context, yesButtonText);
+                                                    Navigator.pop(context, 'Yes');
                                                   },
                                                   child: const Text(yesButtonText),
                                                 ),
@@ -593,10 +575,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                                     else {
                                                       log("error");
                                                     }
-                                                    setState(() {
-                                                      // _dontFetch = false;
-                                                    });
-                                                    Navigator.pop(context, yesButtonText);
+                                                    Navigator.pop(context, 'Yes');
                                                     },
                                                   child: const Text(yesButtonText),
                                                 ),
@@ -699,18 +678,16 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                                 log("review failed");
                                               }
                                               else {
-                                                log("take success");
+                                                log("review success");
                                                 setState(() {
                                                   _future = getRide();
+                                                  _rating = 3.0;
                                                 });
                                               }
                                             }
                                             else {
                                               log("error");
                                             }
-                                            setState(() {
-                                              _rating = 3.0;
-                                            });
                                           },
                                         ),
                                       ],
@@ -807,18 +784,16 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                                 log("review failed");
                                               }
                                               else {
-                                                log("take success");
+                                                log("review success");
                                                 setState(() {
                                                   _future = getRide();
+                                                  _rating = 3.0;
                                                 });
                                               }
                                             }
                                             else {
                                               log("error");
                                             }
-                                            setState(() {
-                                              _rating = 3.0;
-                                            });
                                           },
                                         ),
                                       ],
@@ -910,18 +885,16 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                                 log("review failed");
                                               }
                                               else {
-                                                log("take success");
+                                                log("review success");
                                                 setState(() {
                                                   _future = getRide();
+                                                  _rating = 3.0;
                                                 });
                                               }
                                             }
                                             else {
                                               log("error");
                                             }
-                                            setState(() {
-                                              _rating = 3.0;
-                                            });
                                           },
                                         ),
                                       ],
@@ -1013,18 +986,16 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                                 log("review failed");
                                               }
                                               else {
-                                                log("take success");
+                                                log("review success");
                                                 setState(() {
                                                   _future = getRide();
+                                                  _rating = 3.0;
                                                 });
                                               }
                                             }
                                             else {
                                               log("error");
                                             }
-                                            setState(() {
-                                              _rating = 3.0;
-                                            });
                                           },
                                         ),
                                       ],

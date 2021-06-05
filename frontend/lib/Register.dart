@@ -1,61 +1,51 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
-import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'dart:developer';
 import 'helpers/Constants.dart';
-import 'Login.dart';
-
 
 class Register extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: registerTag,
-      theme: new ThemeData(
-        scaffoldBackgroundColor: appBackgroundColor,
-      ),
-      home: Scaffold(
-        appBar: AppBar(
-          backgroundColor: appBackgroundColor,
-          title: Text(registerTag, style: TextStyle(fontSize: 24.0, color: appMainColor)),
-          leading: GestureDetector(
-            onTap: () => showDialog<String>(
-              context: context,
-              builder: (BuildContext context) => AlertDialog(
-                title: Text(discardAlertTitle),
-                content: Text(discardAlertText),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () {
-                      log("Cancel");
-                      Navigator.pop(context, 'Cancel');
-                      },
-                    child: const Text(cancelButtonText),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      log("Back to Login.");
-                      Navigator.pop(context, 'Yes');
-                      Navigator.of(context).pushNamed(loginTag);
-                    },
-                    child: const Text(yesButtonText),
-                  ),
-                ],
-              ),
-            ),
-            child: Icon(
-              Icons.arrow_back,
-              color: appMainColor,
-              size: 30.0,
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: appBackgroundColor,
+        title: Text('Sign up', style: TextStyle(fontSize: 24.0, color: appMainColor)),
+        leading: GestureDetector(
+          onTap: () => showDialog<String>(
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+              title: Text("Exit"),
+              content: Text("Back to login?"),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    log("Cancel");
+                    Navigator.pop(context, 'Cancel');
+                  },
+                  child: const Text('Cancel'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    log("Back to Login.");
+                    Navigator.pop(context, 'Yes');
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Yes'),
+                ),
+              ],
             ),
           ),
+          child: Icon(
+            Icons.arrow_back,
+            color: appMainColor,
+            size: 30.0,
+          ),
         ),
-        body: RegisterPage(),
       ),
-      routes: routes,
+      body: RegisterPage(),
     );
   }
 }
@@ -77,6 +67,7 @@ class RegisterForm extends State<RegisterPage> {
   final _gradeController = TextEditingController();
   */
   final snackBar = SnackBar(content: Text(uploadImageHintText ));
+  final errorSnackBar = SnackBar(content: Text("Existing Account!"));
   var newUser = {"sid": '', "password": '', 'name': ''};
   /*
   var _gender;
@@ -316,13 +307,14 @@ class RegisterForm extends State<RegisterPage> {
       children: <Widget>[
         Icon(Icons.app_registration , color: appMainColor, size: 24.0,),
         SizedBox(width: smallSpace),
-          Padding(
+        Padding(
           padding: EdgeInsets.symmetric(vertical: 16.0),
           child: TextButton(
-              style: ButtonStyle(
+            style: ButtonStyle(
 
             ),
-              onPressed: () async {
+            onPressed: () async {
+              // Navigator.of(context).pop();
               if(_formKey.currentState!.validate()) {
                 log("Debuging");
                 log(newUser["sid"].toString());
@@ -336,12 +328,12 @@ class RegisterForm extends State<RegisterPage> {
                 log(res.statusCode.toString());
                 if (res.statusCode == 200) {
                   if(res.body == "Register success") {
-                    log("success");
-                    Navigator.of(context).pushNamed(loginTag);
+                    log("register success");
+                    Navigator.of(context).pop();
                   }
                   else {
                     log("register failed");
-
+                    ScaffoldMessenger.of(context).showSnackBar(errorSnackBar);
                   }
                 } else {
                   log("error");
@@ -349,21 +341,18 @@ class RegisterForm extends State<RegisterPage> {
                 }
 
               }
-              // TODO: send newUser to backend.
-              // @post: newUser: Object(FormData?)
-              // @return: message: String
             },
             //padding: EdgeInsets.all(12),
-             child: Text(signUpButtonText, style: nameStyle),
-            ),
+            child: Text(signUpButtonText, style: nameStyle),
           ),
+        ),
       ],
     );
 
     /* 上傳照片 */
     final beADriver = Visibility(
-        visible: (be_a_driver) ? false : true,
-        child: TextButton(
+      visible: (be_a_driver) ? false : true,
+      child: TextButton(
         style: ButtonStyle(
         ),
         onPressed: () {
@@ -431,9 +420,9 @@ class RegisterForm extends State<RegisterPage> {
               status,
               SizedBox(height: smallSpace),
               */
-              beADriver,
-              chooseImage,
-              uploadImage,
+              // beADriver,
+              // chooseImage,
+              // uploadImage,
               saveChangeButton,
             ],
           ),
@@ -443,6 +432,6 @@ class RegisterForm extends State<RegisterPage> {
   }
 }
 
-final routes = <String, WidgetBuilder> {
-  loginTag: (context) => Login(),
-};
+// final routes = <String, WidgetBuilder> {
+//   loginTag: (context) => Login(),
+// };

@@ -1,62 +1,53 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'dart:convert';
-import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'models/User.dart';
 import 'dart:developer';
 import 'helpers/Constants.dart';
-import 'MainPage.dart';
 
 class Modified extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return MaterialApp(
-      title: modifiedTag,
-      theme: new ThemeData(
-        scaffoldBackgroundColor: appBackgroundColor,
-      ),
-      home: Scaffold(
-        appBar: AppBar(
-          backgroundColor: appBackgroundColor,
-          title: Text(editTitle, style: TextStyle(fontSize: 24.0, color: appMainColor)),
-          leading: GestureDetector(
-            onTap: () => showDialog<String>(
-              context: context,
-              builder: (BuildContext context) => AlertDialog(
-                title: Text(discardAlertTitle),
-                content: Text(discardAlertText),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () {
-                      log("Cancel");
-                      Navigator.pop(context, 'Cancel');
-                    },
-                    child: const Text(cancelButtonText),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      log("Back to MainPage");
-                      Navigator.pop(context, 'Yes');
-                      Navigator.of(context).pushNamed(mainPageTag);
-                    },
-                    child: const Text(yesButtonText),
-                  ),
-                ],
-              ),
-            ),
-            child: Icon(
-              Icons.arrow_back,
-              color: appMainColor,
-              size: 30.0,
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: appBackgroundColor,
+        title: Text('Edit Profile', style: TextStyle(fontSize: 24.0, color: appMainColor)),
+        leading: GestureDetector(
+          onTap: () => showDialog<String>(
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+              title: Text(discardAlertTitle),
+              content: Text(discardAlertText),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    log("Cancel");
+                    Navigator.pop(context, 'Cancel');
+                  },
+                  child: const Text('Cancel'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    log("Back to MainPage");
+                    Navigator.pop(context, 'Yes');
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Yes'),
+                ),
+              ],
             ),
           ),
+          child: Icon(
+            Icons.arrow_back,
+            color: appMainColor,
+            size: 30.0,
+          ),
         ),
-        body: ModifiedPage(),
       ),
-      routes: routes,
+      body: ModifiedPage(),
     );
   }
 }
@@ -73,6 +64,7 @@ class ModifiedForm extends State<ModifiedPage> {
   var editedUser = {'id': userData.id, 'name': '' , 'dept': '' , 'grade': '' , 'gender': ''};
   final _formKey = GlobalKey<FormState>();
   var _gender;
+  var _grade;
   var _isChosen;
   /*
   var _status;
@@ -129,11 +121,11 @@ class ModifiedForm extends State<ModifiedPage> {
       textInputAction: TextInputAction.next,
       maxLines: 1,
       decoration: InputDecoration(
-          labelText: nameAttr,
-          contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 5.0),
-          enabledBorder: underlineStyle,
-          focusedBorder: underlineStyle,
-          labelStyle: labelStyle,
+        labelText: nameAttr,
+        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 5.0),
+        enabledBorder: underlineStyle,
+        focusedBorder: underlineStyle,
+        labelStyle: labelStyle,
       ),
       style: TextStyle(
         fontSize: 24.0,
@@ -154,14 +146,14 @@ class ModifiedForm extends State<ModifiedPage> {
     final gender = DropdownButtonFormField(
       items: genderList.map((String gender) {
         return new DropdownMenuItem(
-            value: gender,
-            child: Text(gender, style: TextStyle(fontSize: 24.0,
-              color: appWhiteColor,)),
-            );
+          value: gender,
+          child: Text(gender, style: TextStyle(fontSize: 24.0,
+            color: appWhiteColor,)),
+        );
       }).toList(),
       onChanged: (newValue) {
         log("Save gender");
-        //setState(() => _gender = newValue);
+        // setState(() => _gender = newValue);
         _gender = newValue;
         editedUser['gender'] = _gender;
       },
@@ -204,11 +196,21 @@ class ModifiedForm extends State<ModifiedPage> {
       },
     );
     /* 年級 */
-    final grade = TextFormField(
-      controller: _gradeController,
-      keyboardType: TextInputType.text,
-      textInputAction: TextInputAction.next,
-      maxLines: 1,
+    final grade = DropdownButtonFormField(
+      items: [1,2,3,4,5,6,7].map((int gr) {
+        return new DropdownMenuItem(
+          value: gr,
+          child: Text(gr.toString(), style: TextStyle(fontSize: 24.0,
+            color: appWhiteColor,)),
+        );
+      }).toList(),
+      onChanged: (newValue) {
+        log("Save grade");
+        _grade = newValue;
+        editedUser['grade'] = newValue;
+      },
+      value: _grade,
+      dropdownColor: appBackgroundColor,
       decoration: InputDecoration(
         labelText: gradeAttr,
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 5.0),
@@ -216,47 +218,7 @@ class ModifiedForm extends State<ModifiedPage> {
         focusedBorder: underlineStyle,
         labelStyle: labelStyle,
       ),
-      style: TextStyle(
-        fontSize: 24.0,
-        color: appWhiteColor,
-      ),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return gradeIsEmptyText;
-        }
-        else {
-          log("Save grade");
-          editedUser['grade'] = value;
-          return null;
-        }
-      },
     );
-    /*
-    /* 用戶身份 */
-    final status = DropdownButtonFormField(
-      items: statusList.map((String status) {
-        return new DropdownMenuItem(
-          value: status,
-          child: Text(status, style: TextStyle(fontSize: 24.0,
-            color: appWhiteColor,)),
-        );
-      }).toList(),
-      onChanged: (newValue) {
-        log("Save status");
-        setState(() => _status = newValue);
-        editedData.is_driver = (_status == prateAttr) ? 0 : 1;
-      },
-      value: _status,
-      dropdownColor: appBackgroundColor,
-      decoration: InputDecoration(
-        labelText: statusAttr,
-        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-        enabledBorder: underlineStyle,
-        focusedBorder: underlineStyle,
-        labelStyle: labelStyle,
-      ),
-    );
-    */
     /* 儲存修改按鈕 */
     final saveChangeButton = Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -279,7 +241,7 @@ class ModifiedForm extends State<ModifiedPage> {
                 var editedUserEncoded = json.encode(editedUser);
                 var res =  await http.post(url + '/profile', body: editedUserEncoded , headers: <String, String>{
                   'Content-Type': 'application/json; charset=UTF-8',
-                  },);
+                },);
                 log(res.toString());
                 log(res.statusCode.toString());
                 if (res.statusCode == 200) {
@@ -289,8 +251,10 @@ class ModifiedForm extends State<ModifiedPage> {
                     var getData = await http.get(url + '/users/' + userData.id , headers: <String, String>{
                       'Content-Type': 'application/json; charset=UTF-8',
                     },);
+                    log("user modified: " + getData.toString());
                     userData = User.fromJson(jsonDecode(getData.body));
-                    Navigator.of(context).pushNamed(mainPageTag);
+                    // log("mod: "+userData.gender);
+                    Navigator.of(context).pushNamedAndRemoveUntil(mainPageTag, (Route<dynamic> route) => false);
                   }
                   else {
                     log("edit failed");
@@ -300,9 +264,6 @@ class ModifiedForm extends State<ModifiedPage> {
                   throw Exception('Failed to edit data.');
                 }
               }
-              // TODO: send newUser to backend.
-              // @post: newUser: Object(FormData?)
-              // @return: message: String
             },
             //padding: EdgeInsets.all(12),
             child: Text(saveChangeButtonText, style: nameStyle),
@@ -373,43 +334,43 @@ class ModifiedForm extends State<ModifiedPage> {
     );
 
     return Form(
-          key: _formKey,
-          child: Scaffold(
-            body: Center(
-              child: Padding(
-                padding: EdgeInsets.only(left: 24.0, right: 24.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+      key: _formKey,
+      child: Scaffold(
+        body: Center(
+          child: Padding(
+            padding: EdgeInsets.only(left: 24.0, right: 24.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                userName,
+                SizedBox(height: smallSpace),
+                gender,
+                SizedBox(height: smallSpace),
+                Row(
                   children: <Widget>[
-                    userName,
-                    SizedBox(height: smallSpace),
-                    gender,
-                    SizedBox(height: smallSpace),
-                    Row(
-                      children: <Widget>[
-                        Expanded(child: dept,),
-                        Expanded(child: grade,),
-                      ],
-                    ),
-                    SizedBox(height: smallSpace),
-                    /*
+                    Expanded(child: dept,),
+                    Expanded(child: grade,),
+                  ],
+                ),
+                SizedBox(height: smallSpace),
+                /*
                   SizedBox(height: smallSpace),
                   status,
                   */
 
-                    beADriver,
-                    chooseImage,
-                    uploadImage,
-                    saveChangeButton,
-                  ],
-                ),
-              ),
+                beADriver,
+                chooseImage,
+                uploadImage,
+                saveChangeButton,
+              ],
             ),
           ),
-        );
+        ),
+      ),
+    );
   }
 }
-
-final routes = <String, WidgetBuilder> {
-  mainPageTag: (context) => MainPage(),
-};
+//
+// final routes = <String, WidgetBuilder> {
+//   mainPageTag: (context) => MainPage(),
+// };
