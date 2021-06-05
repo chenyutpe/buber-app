@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'helpers/Constants.dart';
-import 'models/User.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'MainPage.dart';
@@ -11,14 +10,12 @@ class Wall extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: mainPageTag,
-      home: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           backgroundColor: appBackgroundColor,
           title: Text(reqTitle, style: TextStyle(fontSize: 24.0, color: appMainColor)),
           leading: GestureDetector(
-            onTap: (){Navigator.of(context).pushNamed(mainPageTag);},
+            onTap: (){Navigator.of(context).pop();},
             child: Icon(
               Icons.arrow_back,
               color: appMainColor,
@@ -29,9 +26,7 @@ class Wall extends StatelessWidget {
             Padding(
                 padding: EdgeInsets.only(right: 24.0),
                 child: GestureDetector(
-                  onTap: () => Navigator.push(context, new MaterialPageRoute(
-                      builder: (context) => new Notif())
-                  ),
+                  onTap: () => Navigator.of(context).pushNamed(notificationTag),
                   child: Icon(
                     Icons.notifications,
                     color: appMainColor,
@@ -42,9 +37,7 @@ class Wall extends StatelessWidget {
           ],
         ),
         body: WallPage(),
-      ),
-      routes: routes,
-    );
+      );
   }
 
 }
@@ -155,9 +148,7 @@ class WallList extends State<WallPage> {
                                   pList.add(res.body);
                                   log("Ride id: " + pList[0]);
                                   log("success");
-                                  Navigator.push(context, new MaterialPageRoute(
-                                      builder: (context) => new Notif())
-                                  );
+                                  Navigator.of(context).popAndPushNamed(notificationTag);
                               } else {
                                 log("error");
                                 throw Exception('Failed to call.');
