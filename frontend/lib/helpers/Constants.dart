@@ -12,7 +12,12 @@ var dList = [];
 var driverRideId = '';
 
 //Url
-const url = 'http://127.0.0.1:5000';
+final url = url_emulator;
+const url_web = 'http://127.0.0.1:5000';
+const url_emulator = 'http://10.0.2.2:5000';
+
+//Number
+const maxClientReq = 20;
 
 // Color
 Color appBackgroundColor = Color.fromRGBO(249, 249, 249, 1.0);

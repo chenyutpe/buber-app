@@ -15,7 +15,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   // var rating;
   var tabList = ( userData.is_driver == 0 ) ? tabPList : tabDList;
-  var _rating = 3.0;
+  var _rating = List.filled(maxClientReq, 3.0); //dirty and ugly
   Future<List<List<Ride>>>? _future;
   // var _dontFetch = false;
   // List<Ride> notifList = [];
@@ -134,6 +134,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                   // ),
                 ],
                 bottom: TabBar(
+                  indicatorColor: appMainColor,
                   controller: _tabController,
                   tabs: tabList.map((status) => Tab(child: Text(status, style: labelStyle))).toList(),
                 ),
@@ -189,11 +190,11 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
 
                                             mainAxisAlignment: MainAxisAlignment.center,
                                             children: <Widget>[
-                                              Text(notifList[index].s, style: nameStyle),
+                                              Text(notifList[index].s, style: attrStyle),
                                               SizedBox(width: smallSpace),
                                               Icon(Icons.arrow_right_alt , color: appMainColor, size: 18.0,),
                                               SizedBox(width: smallSpace),
-                                              Text(notifList[index].d, style: nameStyle),
+                                              Text(notifList[index].d, style: attrStyle),
                                             ],
                                           ),
                                         ],
@@ -631,17 +632,17 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                             children: <Widget>[
                                               Icon(Icons.star_rate, color: appMainColor, size: 18.0,),
                                               SizedBox(width: smallSpace),
-                                              Text(_rating.toString() ,style: labelStyle),
+                                              Text(_rating[index].toString() ,style: labelStyle),
                                               Slider(
                                                 activeColor: appMainColor,
                                                 inactiveColor: appBackgroundColor,
-                                                value: _rating,
+                                                value: _rating[index],
                                                 min: 1,
                                                 max: 5,
                                                 onChanged: (newValue) {
                                                   setState(() {
                                                     // _dontFetch = true;
-                                                    _rating = newValue;
+                                                    _rating[index] = newValue;
                                                   });
                                                 },
                                                 onChangeStart: (startValue) {
@@ -665,7 +666,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                         TextButton(
                                           child: Text('Send', style: textButtonStyle,),
                                           onPressed: () async {
-                                            var changeState = {'oid': notifList[index].id, 'id': userData.id, 'rate':_rating};
+                                            var changeState = {'oid': notifList[index].id, 'id': userData.id, 'rate':_rating[index]};
                                             var changeStateEncode = jsonEncode(changeState);
                                             var res = await http.post(url + '/review', body: changeStateEncode, headers: <String, String> {
                                               'Content-Type': 'application/json; charset=UTF-8',
@@ -681,7 +682,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                                 log("review success");
                                                 setState(() {
                                                   _future = getRide();
-                                                  _rating = 3.0;
+                                                  _rating[index] = 3.0;
                                                 });
                                               }
                                             }
@@ -738,17 +739,17 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                             children: <Widget>[
                                               Icon(Icons.star_rate, color: appMainColor, size: 18.0,),
                                               SizedBox(width: smallSpace),
-                                              Text(_rating.toString() ,style: labelStyle),
+                                              Text(_rating[index].toString() ,style: labelStyle),
                                               Slider(
                                                 activeColor: appMainColor,
                                                 inactiveColor: appBackgroundColor,
-                                                value: _rating,
+                                                value: _rating[index],
                                                 min: 1,
                                                 max: 5,
                                                 onChanged: (newValue) {
                                                   setState(() {
                                                     // _dontFetch = true;
-                                                    _rating = newValue;
+                                                    _rating[index] = newValue;
                                                   });
                                                 },
                                                 onChangeStart: (startValue) {
@@ -771,7 +772,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                         TextButton(
                                           child: Text('Send', style: textButtonStyle,),
                                           onPressed: () async {
-                                            var changeState = {'oid': notifList[index].id, 'id': userData.id, 'rate':_rating};
+                                            var changeState = {'oid': notifList[index].id, 'id': userData.id, 'rate':_rating[index]};
                                             var changeStateEncode = jsonEncode(changeState);
                                             var res = await http.post(url + '/review', body: changeStateEncode, headers: <String, String> {
                                               'Content-Type': 'application/json; charset=UTF-8',
@@ -787,7 +788,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                                 log("review success");
                                                 setState(() {
                                                   _future = getRide();
-                                                  _rating = 3.0;
+                                                  _rating[index] = 3.0;
                                                 });
                                               }
                                             }
@@ -839,17 +840,17 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                             children: <Widget>[
                                               Icon(Icons.star_rate, color: appMainColor, size: 18.0,),
                                               SizedBox(width: smallSpace),
-                                              Text(_rating.toString() ,style: labelStyle),
+                                              Text(_rating[index].toString() ,style: labelStyle),
                                               Slider(
                                                 activeColor: appMainColor,
                                                 inactiveColor: appBackgroundColor,
-                                                value: _rating,
+                                                value: _rating[index],
                                                 min: 1,
                                                 max: 5,
                                                 onChanged: (newValue) {
                                                   setState(() {
                                                     // _dontFetch = true;
-                                                    _rating = newValue;
+                                                    _rating[index] = newValue;
                                                   });
                                                 },
                                                 onChangeStart: (startValue) {
@@ -872,7 +873,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                         TextButton(
                                           child: Text('Send', style: textButtonStyle,),
                                           onPressed: () async {
-                                            var changeState = {'oid': notifList[index].id, 'id': userData.id, 'rate':_rating};
+                                            var changeState = {'oid': notifList[index].id, 'id': userData.id, 'rate':_rating[index]};
                                             var changeStateEncode = jsonEncode(changeState);
                                             var res = await http.post(url + '/review', body: changeStateEncode, headers: <String, String> {
                                               'Content-Type': 'application/json; charset=UTF-8',
@@ -888,7 +889,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                                 log("review success");
                                                 setState(() {
                                                   _future = getRide();
-                                                  _rating = 3.0;
+                                                  _rating[index] = 3.0;
                                                 });
                                               }
                                             }
@@ -940,17 +941,17 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                             children: <Widget>[
                                               Icon(Icons.star_rate, color: appMainColor, size: 18.0,),
                                               SizedBox(width: smallSpace),
-                                              Text(_rating.toString() ,style: labelStyle),
+                                              Text(_rating[index].toString() ,style: labelStyle),
                                               Slider(
                                                 activeColor: appMainColor,
                                                 inactiveColor: appBackgroundColor,
-                                                value: _rating,
+                                                value: _rating[index],
                                                 min: 1,
                                                 max: 5,
                                                 onChanged: (newValue) {
                                                   setState(() {
                                                     // _dontFetch = true;
-                                                    _rating = newValue;
+                                                    _rating[index] = newValue;
                                                   });
                                                 },
                                                 onChangeStart: (startValue) {
@@ -973,7 +974,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                         TextButton(
                                           child: Text('Send', style: textButtonStyle,),
                                           onPressed: () async {
-                                            var changeState = {'oid': notifList[index].id, 'id': userData.id, 'rate':_rating};
+                                            var changeState = {'oid': notifList[index].id, 'id': userData.id, 'rate':_rating[index]};
                                             var changeStateEncode = jsonEncode(changeState);
                                             var res = await http.post(url + '/review', body: changeStateEncode, headers: <String, String> {
                                               'Content-Type': 'application/json; charset=UTF-8',
@@ -989,7 +990,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                                 log("review success");
                                                 setState(() {
                                                   _future = getRide();
-                                                  _rating = 3.0;
+                                                  _rating[index] = 3.0;
                                                 });
                                               }
                                             }

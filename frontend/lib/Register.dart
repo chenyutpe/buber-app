@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart';
+//import 'package:image_picker/image_picker.dart';
 import 'dart:developer';
 import 'helpers/Constants.dart';
 
@@ -75,6 +75,7 @@ class RegisterForm extends State<RegisterPage> {
   */
   var be_a_driver;
   var _isChosen;
+  /*
   File file = File('');
 
   final String phpEndPoint = '';
@@ -98,6 +99,8 @@ class RegisterForm extends State<RegisterPage> {
       print(err);
     });
   }
+
+   */
 
   @override
   void initState() {
@@ -370,7 +373,7 @@ class RegisterForm extends State<RegisterPage> {
         style: ButtonStyle(
         ),
         onPressed: () {
-          _choose();
+          //_choose();
           //TODO: Upload {cert: image} through image_picker and http.
           //TODO: Send {cert: image} to backend.
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -384,7 +387,7 @@ class RegisterForm extends State<RegisterPage> {
         style: ButtonStyle(
         ),
         onPressed: () {
-          _upload();
+          //_upload();
           //TODO: Upload {cert: image} through image_picker and http.
           //TODO: Send {cert: image} to backend.
           ScaffoldMessenger.of(context).showSnackBar(snackBar);

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart';
+//import 'package:image_picker/image_picker.dart';
 import 'models/User.dart';
 import 'dart:developer';
 import 'helpers/Constants.dart';
@@ -70,6 +70,7 @@ class ModifiedForm extends State<ModifiedPage> {
   var _status;
   */
   var be_a_driver = userData.is_driver;
+  /*
   File file = File('');
 
   final String phpEndPoint = '';
@@ -94,6 +95,8 @@ class ModifiedForm extends State<ModifiedPage> {
       print(err);
     });
   }
+
+   */
 
   @override
   void initState() {
@@ -310,7 +313,7 @@ class ModifiedForm extends State<ModifiedPage> {
         style: ButtonStyle(
         ),
         onPressed: () {
-          _choose();
+          //_choose();
           //TODO: Upload {cert: image} through image_picker and http.
           //TODO: Send {cert: image} to backend.
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -324,7 +327,7 @@ class ModifiedForm extends State<ModifiedPage> {
         style: ButtonStyle(
         ),
         onPressed: () {
-          _upload();
+          //_upload();
           //TODO: Upload {cert: image} through image_picker and http.
           //TODO: Send {cert: image} to backend.
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
