@@ -161,7 +161,8 @@ class ModifiedForm extends State<ModifiedPage> {
       }).toList(),
       onChanged: (newValue) {
         log("Save gender");
-        setState(() => _gender = newValue);
+        //setState(() => _gender = newValue);
+        _gender = newValue;
         editedUser['gender'] = _gender;
       },
       value: _gender,

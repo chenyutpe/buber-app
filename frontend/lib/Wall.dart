@@ -29,7 +29,9 @@ class Wall extends StatelessWidget {
             Padding(
                 padding: EdgeInsets.only(right: 24.0),
                 child: GestureDetector(
-                  onTap: () => Navigator.of(context).pushNamed(notificationTag),
+                  onTap: () => Navigator.push(context, new MaterialPageRoute(
+                      builder: (context) => new Notif())
+                  ),
                   child: Icon(
                     Icons.notifications,
                     color: appMainColor,
@@ -153,7 +155,9 @@ class WallList extends State<WallPage> {
                                   pList.add(res.body);
                                   log("Ride id: " + pList[0]);
                                   log("success");
-                                  Navigator.of(context).pushNamed(notificationTag);
+                                  Navigator.push(context, new MaterialPageRoute(
+                                      builder: (context) => new Notif())
+                                  );
                               } else {
                                 log("error");
                                 throw Exception('Failed to call.');
