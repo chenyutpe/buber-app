@@ -16,9 +16,9 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
   //@get: snapshot.data: List<Object>, dRideList: List<Object>
   //Future _future;
   late TabController _tabController;
-  var rating;
+  // var rating;
   var tabList = ( userData.is_driver == 0 ) ? tabPList : tabDList;
-  var _rating = 1.0;
+  var _rating = 3.0;
   // var _dontFetch = false;
   // List<Ride> notifList = [];
   // var _stateDriver = 0;
@@ -675,7 +675,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                               log("error");
                                             }
                                             setState(() {
-                                              // _dontFetch = false;
+                                              _rating = 3.0;
                                             });
                                           },
                                         ),
@@ -780,7 +780,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                               log("error");
                                             }
                                             setState(() {
-                                              // _dontFetch = false;
+                                              _rating = 3.0;
                                             });
                                           },
                                         ),
@@ -880,7 +880,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                               log("error");
                                             }
                                             setState(() {
-                                              // _dontFetch = false;
+                                              _rating = 3.0;
                                             });
                                           },
                                         ),
@@ -980,7 +980,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                               log("error");
                                             }
                                             setState(() {
-                                              // _dontFetch = false;
+                                              _rating = 3.0;
                                             });
                                           },
                                         ),
