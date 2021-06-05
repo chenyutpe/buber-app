@@ -161,7 +161,7 @@ class ModifiedForm extends State<ModifiedPage> {
       dropdownColor: appBackgroundColor,
       decoration: InputDecoration(
         labelText: genderAttr,
-        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 5.0),
         enabledBorder: underlineStyle,
         focusedBorder: underlineStyle,
         labelStyle: labelStyle,
@@ -197,28 +197,28 @@ class ModifiedForm extends State<ModifiedPage> {
     );
     /* 年級 */
     final grade = DropdownButtonFormField(
-      items: [1,2,3,4,5,6,7].map((int gr) {
-        return new DropdownMenuItem(
-          value: gr,
-          child: Text(gr.toString(), style: TextStyle(fontSize: 24.0,
-            color: appWhiteColor,)),
-        );
-      }).toList(),
-      onChanged: (newValue) {
+        items: [1,2,3,4,5,6,7].map((int gr) {
+          return new DropdownMenuItem(
+            value: gr,
+            child: Text(gr.toString(), style: TextStyle(fontSize: 24.0,
+              color: appWhiteColor,)),
+          );
+        }).toList(),
+        onChanged: (newValue) {
         log("Save grade");
         _grade = newValue;
         editedUser['grade'] = newValue;
-      },
-      value: _grade,
-      dropdownColor: appBackgroundColor,
-      decoration: InputDecoration(
+        },
+        value: _grade,
+        dropdownColor: appBackgroundColor,
+        decoration: InputDecoration(
         labelText: gradeAttr,
-        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 5.0),
+        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 9.0),
         enabledBorder: underlineStyle,
         focusedBorder: underlineStyle,
         labelStyle: labelStyle,
-      ),
-    );
+        ),
+        );
     /* 儲存修改按鈕 */
     final saveChangeButton = Row(
       mainAxisAlignment: MainAxisAlignment.center,
