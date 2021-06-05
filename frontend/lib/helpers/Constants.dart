@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../models/User.dart';
 import '../models/Ride.dart';
 
 // Test
@@ -45,6 +44,8 @@ final dataStyle = TextStyle(fontSize: 18.0, color: appWhiteColor);
 /* Title */
 const appTitle = "Buber-Bike";
 const reqTitle = "Request";
+const editTitle = 'Edit Profile';
+const mainPageTitle = 'Profile';
 /* HintText */
 const idHintText = "Student ID";
 const pwHintText = "Password";
@@ -57,6 +58,8 @@ const saveChangeButtonText = "Save changes";
 const chooseImageButtonText = "Upload your bike license!";
 const uploadImageButtonText = "Upload";
 const sendButtonText = "Send";
+const cancelButtonText = "Cancel";
+const yesButtonText = "Yes";
 /* Validator & ErrorText */
 const idIsEmptyText = "Please enter your ID.";
 const pwIsEmptyText = "Please enter your password.";

@@ -20,7 +20,7 @@ class Register extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: appBackgroundColor,
-          title: Text('Sign up', style: TextStyle(fontSize: 24.0, color: appMainColor)),
+          title: Text(registerTag, style: TextStyle(fontSize: 24.0, color: appMainColor)),
           leading: GestureDetector(
             onTap: () => showDialog<String>(
               context: context,
@@ -33,7 +33,7 @@ class Register extends StatelessWidget {
                       log("Cancel");
                       Navigator.pop(context, 'Cancel');
                       },
-                    child: const Text('Cancel'),
+                    child: const Text(cancelButtonText),
                   ),
                   TextButton(
                     onPressed: () {
@@ -41,7 +41,7 @@ class Register extends StatelessWidget {
                       Navigator.pop(context, 'Yes');
                       Navigator.of(context).pushNamed(loginTag);
                     },
-                    child: const Text('Yes'),
+                    child: const Text(yesButtonText),
                   ),
                 ],
               ),

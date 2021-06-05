@@ -158,7 +158,7 @@ class MainPage extends StatelessWidget {
         home: Scaffold(
           appBar: AppBar(
               backgroundColor: appBackgroundColor,
-              title: Text('Profile', style: TextStyle(fontSize: 24.0, color: appMainColor)),
+              title: Text(mainPageTitle, style: TextStyle(fontSize: 24.0, color: appMainColor)),
             leading: GestureDetector(
               onTap: () => showDialog<String>(
                   context: context,
@@ -167,16 +167,16 @@ class MainPage extends StatelessWidget {
                     content: Text(logoutAlertText),
                     actions: <Widget>[
                       TextButton(
-                        onPressed: () => Navigator.pop(context, 'Cancel'),
-                        child: const Text('Cancel'),
+                        onPressed: () => Navigator.pop(context, cancelButtonText),
+                        child: const Text(cancelButtonText),
                       ),
                       TextButton(
                         onPressed: () {
                           log("Back to Login.");
-                          Navigator.pop(context, 'Yes');
+                          Navigator.pop(context, yesButtonText);
                           Navigator.of(context).pushNamed(loginTag);
                         },
-                        child: const Text('Yes'),
+                        child: const Text(yesButtonText),
                       ),
                     ],
                   ),

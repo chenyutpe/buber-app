@@ -21,7 +21,7 @@ class Modified extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: appBackgroundColor,
-          title: Text('Edit Profile', style: TextStyle(fontSize: 24.0, color: appMainColor)),
+          title: Text(editTitle, style: TextStyle(fontSize: 24.0, color: appMainColor)),
           leading: GestureDetector(
             onTap: () => showDialog<String>(
               context: context,
@@ -34,7 +34,7 @@ class Modified extends StatelessWidget {
                       log("Cancel");
                       Navigator.pop(context, 'Cancel');
                     },
-                    child: const Text('Cancel'),
+                    child: const Text(cancelButtonText),
                   ),
                   TextButton(
                     onPressed: () {
@@ -42,7 +42,7 @@ class Modified extends StatelessWidget {
                       Navigator.pop(context, 'Yes');
                       Navigator.of(context).pushNamed(mainPageTag);
                     },
-                    child: const Text('Yes'),
+                    child: const Text(yesButtonText),
                   ),
                 ],
               ),

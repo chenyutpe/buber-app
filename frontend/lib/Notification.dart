@@ -95,7 +95,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
     return Scaffold(
               appBar: AppBar(
                 backgroundColor: appBackgroundColor,
-                title: Text('Notification', style: TextStyle(fontSize: 24.0, color: appMainColor)),
+                title: Text(notificationTag, style: TextStyle(fontSize: 24.0, color: appMainColor)),
                 leading: GestureDetector(
                   onTap: (){Navigator.of(context).pop();},
                   child: Icon(
@@ -216,9 +216,9 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                                   onPressed: () {
                                                     log("Cancel");
                                                     log(notifList[index].id + ' ' + notifList[index].s + ' ' + notifList[index].d + ' ' + status);
-                                                    Navigator.pop(context, 'Cancel');
+                                                    Navigator.pop(context, cancelButtonText);
                                                   },
-                                                  child: const Text('Cancel'),
+                                                  child: const Text(cancelButtonText),
                                                 ),
                                                 TextButton(
                                                   onPressed: () async {
@@ -247,9 +247,9 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                                     setState(() {
                                                       // _dontFetch = false;
                                                     });
-                                                    Navigator.pop(context, 'Yes');
+                                                    Navigator.pop(context, yesButtonText);
                                                   },
-                                                  child: const Text('Yes'),
+                                                  child: const Text(yesButtonText),
                                                 ),
                                               ],
                                             ),
@@ -460,9 +460,9 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                                 TextButton(
                                                   onPressed: () {
                                                     log("Cancel");
-                                                    Navigator.pop(context, 'Cancel');
+                                                    Navigator.pop(context, cancelButtonText);
                                                   },
-                                                  child: const Text('Cancel'),
+                                                  child: const Text(cancelButtonText),
                                                 ),
                                                 TextButton(
                                                   onPressed: () async {
@@ -491,9 +491,9 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                                     setState(() {
                                                       // _dontFetch = false;
                                                     });
-                                                    Navigator.pop(context, 'Yes');
+                                                    Navigator.pop(context, yesButtonText);
                                                   },
-                                                  child: const Text('Yes'),
+                                                  child: const Text(yesButtonText),
                                                 ),
                                               ],
                                             ),
@@ -565,9 +565,9 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                                 TextButton(
                                                   onPressed: () {
                                                     log("Cancel");
-                                                    Navigator.pop(context, 'Cancel');
+                                                    Navigator.pop(context, cancelButtonText);
                                                   },
-                                                  child: const Text('Cancel'),
+                                                  child: const Text(cancelButtonText),
                                                 ),
                                                 TextButton(
                                                   onPressed: () async {
@@ -596,9 +596,9 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                                     setState(() {
                                                       // _dontFetch = false;
                                                     });
-                                                    Navigator.pop(context, 'Yes');
+                                                    Navigator.pop(context, yesButtonText);
                                                     },
-                                                  child: const Text('Yes'),
+                                                  child: const Text(yesButtonText),
                                                 ),
                                               ],
                                             ),
