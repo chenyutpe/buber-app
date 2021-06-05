@@ -110,6 +110,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                       child: GestureDetector(
                         onTap: (){
                           setState(() {
+                            _future = getRide();
                           });
                         },
                         child: Icon(
@@ -343,6 +344,9 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                               }
                                               else {
                                                 log("take success");
+                                                setState((){
+                                                  _future = getRide();
+                                                });
                                               }
                                             }
                                             else {
