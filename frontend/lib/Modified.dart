@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'dart:convert';
-import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'models/User.dart';
 import 'dart:developer';
 import 'helpers/Constants.dart';
-import 'MainPage.dart';
 
 class Modified extends StatelessWidget {
   @override
@@ -66,6 +64,7 @@ class ModifiedForm extends State<ModifiedPage> {
   var editedUser = {'id': userData.id, 'name': '' , 'dept': '' , 'grade': '' , 'gender': ''};
   final _formKey = GlobalKey<FormState>();
   var _gender;
+  var _grade;
   var _isChosen;
   /*
   var _status;
@@ -154,7 +153,8 @@ class ModifiedForm extends State<ModifiedPage> {
       }).toList(),
       onChanged: (newValue) {
         log("Save gender");
-        setState(() => _gender = newValue);
+        // setState(() => _gender = newValue);
+        _gender = newValue;
         editedUser['gender'] = _gender;
       },
       value: _gender,
@@ -196,11 +196,21 @@ class ModifiedForm extends State<ModifiedPage> {
       },
     );
     /* 年級 */
-    final grade = TextFormField(
-      controller: _gradeController,
-      keyboardType: TextInputType.text,
-      textInputAction: TextInputAction.next,
-      maxLines: 1,
+    final grade = DropdownButtonFormField(
+      items: [1,2,3,4,5,6,7].map((int gr) {
+        return new DropdownMenuItem(
+          value: gr,
+          child: Text(gr.toString(), style: TextStyle(fontSize: 24.0,
+            color: appWhiteColor,)),
+        );
+      }).toList(),
+      onChanged: (newValue) {
+        log("Save grade");
+        _grade = newValue;
+        editedUser['grade'] = newValue;
+      },
+      value: _grade,
+      dropdownColor: appBackgroundColor,
       decoration: InputDecoration(
         labelText: gradeAttr,
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 5.0),
@@ -208,47 +218,7 @@ class ModifiedForm extends State<ModifiedPage> {
         focusedBorder: underlineStyle,
         labelStyle: labelStyle,
       ),
-      style: TextStyle(
-        fontSize: 24.0,
-        color: appWhiteColor,
-      ),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return gradeIsEmptyText;
-        }
-        else {
-          log("Save grade");
-          editedUser['grade'] = value;
-          return null;
-        }
-      },
     );
-    /*
-    /* 用戶身份 */
-    final status = DropdownButtonFormField(
-      items: statusList.map((String status) {
-        return new DropdownMenuItem(
-          value: status,
-          child: Text(status, style: TextStyle(fontSize: 24.0,
-            color: appWhiteColor,)),
-        );
-      }).toList(),
-      onChanged: (newValue) {
-        log("Save status");
-        setState(() => _status = newValue);
-        editedData.is_driver = (_status == prateAttr) ? 0 : 1;
-      },
-      value: _status,
-      dropdownColor: appBackgroundColor,
-      decoration: InputDecoration(
-        labelText: statusAttr,
-        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-        enabledBorder: underlineStyle,
-        focusedBorder: underlineStyle,
-        labelStyle: labelStyle,
-      ),
-    );
-    */
     /* 儲存修改按鈕 */
     final saveChangeButton = Row(
       mainAxisAlignment: MainAxisAlignment.center,

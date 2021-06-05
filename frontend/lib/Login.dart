@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'helpers/Constants.dart';
 import 'models/User.dart';
 import 'dart:developer';
-import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'MainPage.dart';
-import 'Register.dart';
 
 // 登入頁。輸入帳號(sid)、密碼(password)以登入。
 // 點擊『註冊』後進入[Register]。

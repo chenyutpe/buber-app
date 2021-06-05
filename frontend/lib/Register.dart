@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
-import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'dart:developer';
 import 'helpers/Constants.dart';
-import 'Login.dart';
-
 
 class Register extends StatelessWidget {
   @override

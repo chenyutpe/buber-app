@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'helpers/Constants.dart';
-import 'models/User.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'MainPage.dart';
