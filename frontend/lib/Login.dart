@@ -112,7 +112,7 @@ class LoginPage extends State<Login> {
                   var u = User.fromJson(jsonDecode(res.body));
                   log("user id: " + u.id);
                   userData = u;
-                  Navigator.of(context).pushNamed(mainPageTag, arguments: u);
+                  Navigator.of(context).pushNamedAndRemoveUntil(mainPageTag, (Route<dynamic> route) => false, arguments: u);
                 }
               }
               else {
@@ -157,8 +157,8 @@ class LoginPage extends State<Login> {
     );
   }
 }
-
-final routes = <String, WidgetBuilder>{
-  mainPageTag: (context) => MainPage(),
-  registerTag: (context) => Register(),
-};
+//
+// final routes = <String, WidgetBuilder>{
+//   mainPageTag: (context) => MainPage(),
+//   registerTag: (context) => Register(),
+// };

@@ -13,12 +13,7 @@ class Modified extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return MaterialApp(
-      title: modifiedTag,
-      theme: new ThemeData(
-        scaffoldBackgroundColor: appBackgroundColor,
-      ),
-      home: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           backgroundColor: appBackgroundColor,
           title: Text('Edit Profile', style: TextStyle(fontSize: 24.0, color: appMainColor)),
@@ -40,7 +35,7 @@ class Modified extends StatelessWidget {
                     onPressed: () {
                       log("Back to MainPage");
                       Navigator.pop(context, 'Yes');
-                      Navigator.of(context).pushNamed(mainPageTag);
+                      Navigator.of(context).pop();
                     },
                     child: const Text('Yes'),
                   ),
@@ -55,9 +50,7 @@ class Modified extends StatelessWidget {
           ),
         ),
         body: ModifiedPage(),
-      ),
-      routes: routes,
-    );
+      );
   }
 }
 
@@ -288,8 +281,10 @@ class ModifiedForm extends State<ModifiedPage> {
                     var getData = await http.get(url + '/users/' + userData.id , headers: <String, String>{
                       'Content-Type': 'application/json; charset=UTF-8',
                     },);
+                    log("user modified: " + getData.toString());
                     userData = User.fromJson(jsonDecode(getData.body));
-                    Navigator.of(context).pushNamed(mainPageTag);
+                    // log("mod: "+userData.gender);
+                    Navigator.of(context).pushNamedAndRemoveUntil(mainPageTag, (Route<dynamic> route) => false);
                   }
                   else {
                     log("edit failed");
@@ -299,9 +294,6 @@ class ModifiedForm extends State<ModifiedPage> {
                   throw Exception('Failed to edit data.');
                 }
               }
-              // TODO: send newUser to backend.
-              // @post: newUser: Object(FormData?)
-              // @return: message: String
             },
             //padding: EdgeInsets.all(12),
             child: Text(saveChangeButtonText, style: nameStyle),
@@ -408,7 +400,7 @@ class ModifiedForm extends State<ModifiedPage> {
         );
   }
 }
-
-final routes = <String, WidgetBuilder> {
-  mainPageTag: (context) => MainPage(),
-};
+//
+// final routes = <String, WidgetBuilder> {
+//   mainPageTag: (context) => MainPage(),
+// };

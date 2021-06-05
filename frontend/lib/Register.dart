@@ -12,12 +12,7 @@ import 'Login.dart';
 class Register extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: registerTag,
-      theme: new ThemeData(
-        scaffoldBackgroundColor: appBackgroundColor,
-      ),
-      home: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           backgroundColor: appBackgroundColor,
           title: Text('Sign up', style: TextStyle(fontSize: 24.0, color: appMainColor)),
@@ -25,8 +20,8 @@ class Register extends StatelessWidget {
             onTap: () => showDialog<String>(
               context: context,
               builder: (BuildContext context) => AlertDialog(
-                title: Text(discardAlertTitle),
-                content: Text(discardAlertText),
+                title: Text("Exit"),
+                content: Text("Back to login?"),
                 actions: <Widget>[
                   TextButton(
                     onPressed: () {
@@ -39,7 +34,7 @@ class Register extends StatelessWidget {
                     onPressed: () {
                       log("Back to Login.");
                       Navigator.pop(context, 'Yes');
-                      Navigator.of(context).pushNamed(loginTag);
+                      Navigator.of(context).pop();
                     },
                     child: const Text('Yes'),
                   ),
@@ -54,9 +49,7 @@ class Register extends StatelessWidget {
           ),
         ),
         body: RegisterPage(),
-      ),
-      routes: routes,
-    );
+      );
   }
 }
 
@@ -77,6 +70,7 @@ class RegisterForm extends State<RegisterPage> {
   final _gradeController = TextEditingController();
   */
   final snackBar = SnackBar(content: Text(uploadImageHintText ));
+  final errorSnackBar = SnackBar(content: Text("Existing Account!"));
   var newUser = {"sid": '', "password": '', 'name': ''};
   /*
   var _gender;
@@ -323,6 +317,7 @@ class RegisterForm extends State<RegisterPage> {
 
             ),
               onPressed: () async {
+                // Navigator.of(context).pop();
               if(_formKey.currentState!.validate()) {
                 log("Debuging");
                 log(newUser["sid"].toString());
@@ -336,12 +331,12 @@ class RegisterForm extends State<RegisterPage> {
                 log(res.statusCode.toString());
                 if (res.statusCode == 200) {
                   if(res.body == "Register success") {
-                    log("success");
-                    Navigator.of(context).pushNamed(loginTag);
+                    log("register success");
+                    Navigator.of(context).pop();
                   }
                   else {
                     log("register failed");
-
+                    ScaffoldMessenger.of(context).showSnackBar(errorSnackBar);
                   }
                 } else {
                   log("error");
@@ -349,9 +344,6 @@ class RegisterForm extends State<RegisterPage> {
                 }
 
               }
-              // TODO: send newUser to backend.
-              // @post: newUser: Object(FormData?)
-              // @return: message: String
             },
             //padding: EdgeInsets.all(12),
              child: Text(signUpButtonText, style: nameStyle),
@@ -431,9 +423,9 @@ class RegisterForm extends State<RegisterPage> {
               status,
               SizedBox(height: smallSpace),
               */
-              beADriver,
-              chooseImage,
-              uploadImage,
+              // beADriver,
+              // chooseImage,
+              // uploadImage,
               saveChangeButton,
             ],
           ),
@@ -443,6 +435,6 @@ class RegisterForm extends State<RegisterPage> {
   }
 }
 
-final routes = <String, WidgetBuilder> {
-  loginTag: (context) => Login(),
-};
+// final routes = <String, WidgetBuilder> {
+//   loginTag: (context) => Login(),
+// };

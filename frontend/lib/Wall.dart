@@ -11,14 +11,12 @@ class Wall extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: mainPageTag,
-      home: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           backgroundColor: appBackgroundColor,
           title: Text(reqTitle, style: TextStyle(fontSize: 24.0, color: appMainColor)),
           leading: GestureDetector(
-            onTap: (){Navigator.of(context).pushNamed(mainPageTag);},
+            onTap: (){Navigator.of(context).pop();},
             child: Icon(
               Icons.arrow_back,
               color: appMainColor,
@@ -40,9 +38,7 @@ class Wall extends StatelessWidget {
           ],
         ),
         body: WallPage(),
-      ),
-      routes: routes,
-    );
+      );
   }
 
 }
@@ -153,7 +149,7 @@ class WallList extends State<WallPage> {
                                   pList.add(res.body);
                                   log("Ride id: " + pList[0]);
                                   log("success");
-                                  Navigator.of(context).pushNamed(notificationTag);
+                                  Navigator.of(context).popAndPushNamed(notificationTag);
                               } else {
                                 log("error");
                                 throw Exception('Failed to call.');

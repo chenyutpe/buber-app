@@ -11,12 +11,10 @@ import 'Wall.dart';
 
 class MainPage extends StatelessWidget {
 
-  //TODO: userData from backend
-  //@get: userData: Object(FormData?)
 
     @override
     Widget build(BuildContext context) {
-
+      // log("mp: "+userData.gender);
       final parag = FractionallySizedBox(
         alignment: Alignment.centerLeft,
         widthFactor: 0.1,
@@ -144,18 +142,14 @@ class MainPage extends StatelessWidget {
           ),
           onPressed: () {
             log("Navigate to Wall.");
-            Navigator.push(context, new MaterialPageRoute(
-              builder: (context) => new Wall())
-            );
+            Navigator.of(context).pushNamed(wallTag);
 
           },
           child: Text(wallButtonText, style: TextStyle(fontSize: 24.0, color: appBackgroundColor)),
         ),
       );
 
-      return MaterialApp(
-        title: mainPageTag,
-        home: Scaffold(
+      return Scaffold(
           appBar: AppBar(
               backgroundColor: appBackgroundColor,
               title: Text('Profile', style: TextStyle(fontSize: 24.0, color: appMainColor)),
@@ -174,7 +168,7 @@ class MainPage extends StatelessWidget {
                         onPressed: () {
                           log("Back to Login.");
                           Navigator.pop(context, 'Yes');
-                          Navigator.of(context).pushNamed(loginTag);
+                          Navigator.of(context).pushNamedAndRemoveUntil(loginTag, (Route<dynamic> route) => false);
                         },
                         child: const Text('Yes'),
                       ),
@@ -191,7 +185,9 @@ class MainPage extends StatelessWidget {
               Padding(
                   padding: EdgeInsets.only(right: 24.0),
                   child: GestureDetector(
-                    onTap: () => Navigator.push(context, new MaterialPageRoute(builder: (context) => new Notif() ) ),
+                    onTap: ()  {
+                        Navigator.of(context).pushNamed(notificationTag);
+                      },
                     child: Icon(
                       Icons.notifications,
                       color: appMainColor,
@@ -203,7 +199,7 @@ class MainPage extends StatelessWidget {
                   padding: EdgeInsets.only(right: 24.0),
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.push(context, new MaterialPageRoute(builder: (context) => new Modified() ) );
+                        Navigator.of(context).pushNamed(modifiedTag);
                       },
                     child: Icon(
                         Icons.edit,
@@ -242,15 +238,13 @@ class MainPage extends StatelessWidget {
               ),
             ),
           ),
-        ),
-        routes: routes,
-      );
+        );
     }
 }
-
-final routes = <String, WidgetBuilder> {
-  loginTag: (context) => Login(),
-  modifiedTag: (context) => Modified(),
-  notificationTag: (context) => Notif(),
-  wallTag: (context) => Wall(),
-};
+//
+// final routes = <String, WidgetBuilder> {
+//   loginTag: (context) => Login(),
+//   modifiedTag: (context) => Modified(),
+//   notificationTag: (context) => Notif(),
+//   wallTag: (context) => Wall(),
+// };
