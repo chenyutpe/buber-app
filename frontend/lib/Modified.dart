@@ -77,7 +77,7 @@ class ModifiedForm extends State<ModifiedPage> {
   /*
   var _status;
   */
-  var be_a_driver;
+  var be_a_driver = userData.is_driver;
   File file = File('');
 
   final String phpEndPoint = '';
@@ -106,7 +106,7 @@ class ModifiedForm extends State<ModifiedPage> {
   @override
   void initState() {
     setState(() {
-      be_a_driver = false;
+      be_a_driver = (userData.is_driver != 0);
       _isChosen = false;
     });
   }
@@ -120,6 +120,7 @@ class ModifiedForm extends State<ModifiedPage> {
     final _deptController = TextEditingController(text: editedUser['dept'].toString());
     final _gradeController = TextEditingController(text: editedUser['grade'].toString());
     final snackBar = SnackBar(content: Text(uploadImageHintText ));
+    // log("be_a_driver "+be_a_driver.toString());
 
     /* 暱稱 */
     final userName = TextFormField(
@@ -314,7 +315,25 @@ class ModifiedForm extends State<ModifiedPage> {
       child: TextButton(
         style: ButtonStyle(
         ),
-        onPressed: () {
+        onPressed: () async {
+          var changeState = {'oid': userData.id};
+          var changeStateEncode = jsonEncode(changeState);
+          var res = await http.post(url + '/set_driver', body: changeStateEncode, headers: <String, String> {
+            'Content-Type': 'application/json; charset=UTF-8',
+          },);
+          // log(res.statusCode.toString());
+          if(res.statusCode == 200) {
+            // log("return ok");
+            if(res.body == "false") {
+              log("set driver failed");
+            }
+            else {
+              log("set driver success");
+            }
+          }
+          else {
+            log("error");
+          }
           setState(() {
             be_a_driver = true;
           });
@@ -376,6 +395,7 @@ class ModifiedForm extends State<ModifiedPage> {
                   SizedBox(height: smallSpace),
                   status,
                   */
+
                     beADriver,
                     chooseImage,
                     uploadImage,

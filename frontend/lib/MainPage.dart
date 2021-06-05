@@ -103,7 +103,7 @@ class MainPage extends StatelessWidget {
             child: Text("P", textAlign: TextAlign.center, style: dataStyle,),
           ),
           Expanded(
-            child: Text((userData.prate < 0) ? disable : userData.prate.toString(), textAlign: TextAlign.center, style: dataStyle,),
+            child: Text((userData.prate == 0) ? disable : userData.prate.toStringAsFixed(1), textAlign: TextAlign.center, style: dataStyle,),
           ),
           Expanded(
             child: Text("", textAlign: TextAlign.center, style: dataStyle,),
@@ -121,7 +121,7 @@ class MainPage extends StatelessWidget {
             child: Text("D", textAlign: TextAlign.center, style: dataStyle,),
           ),
           Expanded(
-            child: Text((userData.drate < 0) ? disable : userData.drate.toString(), textAlign: TextAlign.center, style: dataStyle,),
+            child: Text((userData.drate == 0) ? disable : userData.drate.toStringAsFixed(1), textAlign: TextAlign.center, style: dataStyle,),
           ),
           Expanded(
             child: Text("", textAlign: TextAlign.center, style: dataStyle,),

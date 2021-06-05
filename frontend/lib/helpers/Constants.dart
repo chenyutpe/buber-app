@@ -10,6 +10,7 @@ var dRideList = [];
 var pList = [];
 var dList = [];
 
+var driverRideId = '';
 
 //Url
 const url = 'http://127.0.0.1:5000';

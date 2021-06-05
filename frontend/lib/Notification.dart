@@ -16,72 +16,63 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
   //@get: snapshot.data: List<Object>, dRideList: List<Object>
   //Future _future;
   late TabController _tabController;
+  var rating;
   var tabList = ( userData.is_driver == 0 ) ? tabPList : tabDList;
   var _rating = 1.0;
-  var _state = List.filled(100, 0);
-  var driverRideId = 'hello';
-
-  getDriverRideId(r, index){
-    setState(() {
-      //TODO: update new state to backend
-      //@post: state: 1
-      _state[index] = 1;
-      if(r != null) {
-        driverRideId = 'ldkjfslkdjflskdjflskdjf';
-        log("return data " + r.id);
-        log(driverRideId);
-        log("set state");
-        log(_state[index].toString());
-      }
-    });
-  }
+  // var _dontFetch = false;
+  // List<Ride> notifList = [];
+  // var _stateDriver = 0;
+  // var _statePassenger = 0;
+  // var driverRideId = 'hello';
 
   Future<List<List<Ride>>> getRide() async {
+    // if (_dontFetch) {
+    //   return [];
+    // }
     List<Ride> p = [];
     List<Ride> d = [];
-    for(var i = 0; i < pList.length; i++) {
-      var res = await http.get(url + '/rides/' + pList[i], headers: <String, String>{
+    var res = await http.get(
+      url + '/ridesCalledBy/' + userData.id,
+      headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-      },);
-      log("p ride data: " + res.body);
-      var r = Ride.fromJson(jsonDecode(res.body));
-      log(r.toString());
+      },
+    );
+    var temp = jsonDecode(res.body);
+    log("getRide_P: "+temp.toString() + "len: " + temp.length.toString());
+    // log(temp.length.toString());
+    for(var i = 0; i < temp.length; i++) {
+      var r = Ride.fromJson(temp[i]);
       p.add(r);
     }
-    var res;
-    log("driverID: " + driverRideId);
-    /*if(_state[index] == 1) res = await http.get(url + '/rides/' + driverRideId, headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },);
-    //else if(_state[index] == 0) */
-    res = await http.get(url + '/search', headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },);
-    log("d ride data: " + res.body);
-    var temp = jsonDecode(res.body);
-    log(temp.length.toString());
+
+    // log("driverID: " + driverRideId);
+    res = await http.get(
+      url + '/ridesTookBy/' + userData.id,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+    temp = jsonDecode(res.body);
+    log("getRide_D: "+temp.toString() + "len: " + temp.length.toString());
+    if (temp.length == 0) {
+      res = await http.get(
+        url + '/search',
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
+    }
+    temp = jsonDecode(res.body);
+    log("getRide_D_ALL: "+temp.toString() + "len: " + temp.length.toString());
+    // log(temp.length.toString());
     for(var i = 0; i < temp.length; i++) {
-      /*
-      log(i.toString() + " " + temp[i].toString());
-
-      log(temp[i]['id'].toString());
-      log(temp[i]['pid'].toString());
-      log(temp[i]['did'].toString());
-      log(temp[i]['s'].toString());
-      log(temp[i]['d'].toString());
-      log(temp[i]['p_data'].toString());
-      log(temp[i]['p_data'].runtimeType.toString());
-      log(temp[i]['d_data'].toString());
-      log(temp[i]['p_data'].runtimeType.toString());
-       */
-
       var r = Ride.fromJson(temp[i]);
-      //log(i.toString() + " " + r.toString());
       d.add(r);
     }
-    log(d.toString());
+
+    // log(d.toString());
     List<List<Ride>> list = [p, d];
-    log("get notifList");
+    log("getRide ends");
     return list;
   }
 
@@ -138,7 +129,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
               body: FutureBuilder<List<List<Ride>>>(
                 future: getRide(),
                 builder: (context,AsyncSnapshot<List<List<Ride>>> snapshot) {
-                print("snapshot: $snapshot");
+                // print("snapshot: $snapshot");
                 switch (snapshot.connectionState) {
                   case ConnectionState.none: return new Center(child: Text('None', textScaleFactor: 3));
                   case ConnectionState.waiting: return new Center(child: Text('Loading...', textScaleFactor: 3));
@@ -150,10 +141,17 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                         controller: _tabController,
                         children: tabList.map((status) {
                           var _status = (status == prateAttr) ? 0 : 1;
+                          // if (!_dontFetch){
                           List<Ride> notifList = snapshot.data![_status];
-                          log("ListView Builder");
-                          log(notifList.length.toString());
+                          // }
+                          // log(status);
+                          // for (int i =0; i<notifList.length;i++) {
+                          //   log("req $i: " + notifList[i].s.toString());
+                          // }
+                          // log("ListView Builder");
+                          // log(notifList.length.toString());
                           return notifList.length == 0 ?
+
                           Center(
                             child: Text(noRequestText, textScaleFactor: 3),
                           ) :
@@ -163,7 +161,6 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                             ListView.builder(
                               itemCount: notifList.length,
                               itemBuilder: (BuildContext context, int index){
-                                //_state[index] = notifList[index].state;
 
                                 final notAccepted_p = Column(
                                   mainAxisSize: MainAxisSize.min,
@@ -175,6 +172,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                         children: <Widget>[
                                           SizedBox(height: smallSpace),
                                           Row(
+
                                             mainAxisAlignment: MainAxisAlignment.center,
                                             children: <Widget>[
                                               Text(notifList[index].s, style: nameStyle),
@@ -201,17 +199,36 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                                 TextButton(
                                                   onPressed: () {
                                                     log("Cancel");
+                                                    log(notifList[index].id + ' ' + notifList[index].s + ' ' + notifList[index].d + ' ' + status);
                                                     Navigator.pop(context, 'Cancel');
                                                   },
                                                   child: const Text('Cancel'),
                                                 ),
                                                 TextButton(
-                                                  onPressed: () {
-                                                    //TODO: update new state to backend
-                                                    //@post: state: 3
+                                                  onPressed: () async {
+                                                    var changeState = {'oid': notifList[index].id, 'id': userData.id};
+                                                    var changeStateEncode = jsonEncode(changeState);
+                                                    var res = await http.post(url + '/cancel', body: changeStateEncode, headers: <String, String> {
+                                                    'Content-Type': 'application/json; charset=UTF-8',
+                                                    },);
+                                                    log(res.body.toString());
+                                                    // log(res.statusCode.toString());
+                                                    if(res.statusCode == 200) {
+                                                      // log("return ok");
+                                                      if(res.body == "false") {
+                                                        log("cancel ride failed");
+                                                      }
+                                                      else {
+                                                        log("take success");
+                                                      }
+                                                    }
+                                                    else {
+                                                      log("error");
+                                                    }
                                                     setState(() {
-
+                                                      // _dontFetch = false;
                                                     });
+                                                    Navigator.pop(context, 'Yes');
                                                   },
                                                   child: const Text('Yes'),
                                                 ),
@@ -253,7 +270,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                             children: <Widget>[
                                               Icon(Icons.star, color: appMainColor, size: 18.0,),
                                               SizedBox(width: smallSpace),
-                                              Text((notifList[index].p_data.prate > 0) ? notifList[index].p_data.prate.toString() : '-', style: labelStyle),
+                                              Text((notifList[index].p_data.prate > 0) ? notifList[index].p_data.prate.toStringAsFixed(1) : '-', style: labelStyle),
                                             ],
                                           ),
                                           SizedBox(height: smallSpace),
@@ -276,29 +293,54 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                         TextButton(
                                           child: Text('Accept', style: textButtonStyle,),
                                           onPressed: () async {
+                                            log(notifList[index].p_data.name);
                                             var changeState = {'oid': notifList[index].id, 'did': userData.id};
                                             var changeStateEncode = jsonEncode(changeState);
                                             var res = await http.post(url + '/take', body: changeStateEncode, headers: <String, String> {
                                             'Content-Type': 'application/json; charset=UTF-8',
                                             },);
-                                            var r;
-                                            log(res.body.toString());
-                                            log(res.statusCode.toString());
+                                            // log(res.body.toString());
+                                            // log(res.statusCode.toString());
                                             if(res.statusCode == 200) {
-                                              log("return ok");
+                                              // log("return ok");
                                               if(res.body == "failed") {
-                                                log("change state failed");
+                                                // TODO: Should use pop-up message and refresh
+                                                showDialog<String>(
+                                                  context: context,
+                                                  builder: (BuildContext context) => AlertDialog(
+                                                    title: Text("Error"),
+                                                    content: Text("The request is not acceptable!"),
+                                                    actions: <Widget>[
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          log("OK");
+                                                          Navigator.pop(context, 'OK');
+                                                        },
+                                                        child: const Text('OK'),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                                log("Accept failed");
                                               }
                                               else {
-                                                log("success");
-                                                r = Ride.fromJson(jsonDecode(res.body));
+                                                log("take success");
                                               }
                                             }
                                             else {
                                             log("error");
                                             }
-                                            getDriverRideId(r, index);
-                                            }, //notifList[index].state = _state[index];
+                                            var r = jsonDecode(res.body);
+                                            if(res != null) {
+                                              driverRideId = r["_id"]["\$oid"];
+                                              // log("return id: " + r["_id"]["\$oid"]);
+                                              log("driverRideId: " + driverRideId);
+                                              // log("set state");
+                                            }
+                                            setState(() {
+                                              // _dontFetch = false;
+                                            });
+                                          }, //notifList[index].state = _stateDriver[index];
                                         ),
                                       ],
                                     ),
@@ -334,7 +376,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                             children: <Widget>[
                                               Icon(Icons.star, color: appMainColor, size: 18.0,),
                                               SizedBox(width: smallSpace),
-                                              Text((notifList[index].d_data.drate > 0) ? notifList[index].d_data.drate.toString() : '-', style: labelStyle),
+                                              Text((notifList[index].d_data.drate > 0) ? notifList[index].d_data.drate.toStringAsFixed(1) : '-', style: labelStyle),
                                             ],
                                           ),
                                           SizedBox(height: smallSpace),
@@ -356,14 +398,28 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                       children: <Widget>[
                                         TextButton(
                                           child: Text('Finish', style: textButtonStyle,),
-                                          onPressed: () {
+                                          onPressed: () async {
+                                            var changeState = {'oid': notifList[index].id, 'id': userData.id};
+                                            var changeStateEncode = jsonEncode(changeState);
+                                            var res = await http.post(url + '/finish', body: changeStateEncode, headers: <String, String> {
+                                            'Content-Type': 'application/json; charset=UTF-8',
+                                            },);
+                                            log(res.body.toString());
+                                            // log(res.statusCode.toString());
+                                            if(res.statusCode == 200) {
+                                              // log("return ok");
+                                              if(res.body == "false") {
+                                                log("finish ride failed");
+                                              }
+                                              else {
+                                                log("finish ride success");
+                                              }
+                                            }
+                                            else {
+                                              log("error");
+                                            }
                                             setState(() {
-                                              //TODO: update new state to backend
-                                              //@post: state: 2
-                                              _state[index] = 2;
-                                              log("set state");
-                                              log(_state[index].toString());
-                                              //notifList[index].state = _state[index];
+                                              // _dontFetch = false;
                                             });
                                           },
                                         ),
@@ -384,11 +440,30 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                                   child: const Text('Cancel'),
                                                 ),
                                                 TextButton(
-                                                  onPressed: () {
-                                                    //TODO: update new state to backend
-                                                    //@post: state: 4
+                                                  onPressed: () async {
+                                                    var changeState = {'oid': notifList[index].id, 'id': userData.id};
+                                                    var changeStateEncode = jsonEncode(changeState);
+                                                    var res = await http.post(url + '/cancel', body: changeStateEncode, headers: <String, String> {
+                                                      'Content-Type': 'application/json; charset=UTF-8',
+                                                    },);
+                                                    log(res.body.toString());
+                                                    // log(res.statusCode.toString());
+                                                    if(res.statusCode == 200) {
+                                                      // log("return ok");
+                                                      if(res.body == "false") {
+                                                        log("cancel ride failed");
+                                                      }
+                                                      else {
+                                                        log("take success");
+                                                      }
+                                                    }
+                                                    else {
+                                                      log("error");
+                                                    }
                                                     setState(() {
+                                                      // _dontFetch = false;
                                                     });
+                                                    Navigator.pop(context, 'Yes');
                                                   },
                                                   child: const Text('Yes'),
                                                 ),
@@ -430,7 +505,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                             children: <Widget>[
                                               Icon(Icons.star, color: appMainColor, size: 18.0,),
                                               SizedBox(width: smallSpace),
-                                              Text((notifList[index].p_data.prate > 0) ? notifList[index].p_data.prate.toString() : '-', style: labelStyle),
+                                              Text((notifList[index].p_data.prate > 0) ? notifList[index].p_data.prate.toStringAsFixed(1) : '-', style: labelStyle),
                                             ],
                                           ),
                                           SizedBox(height: smallSpace),
@@ -467,12 +542,31 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                                   child: const Text('Cancel'),
                                                 ),
                                                 TextButton(
-                                                  onPressed: () {
-                                                    //TODO: update new state to backend
-                                                    //@post: state: 5
+                                                  onPressed: () async {
+                                                    var changeState = {'oid': notifList[index].id, 'id': userData.id};
+                                                    var changeStateEncode = jsonEncode(changeState);
+                                                    var res = await http.post(url + '/cancel', body: changeStateEncode, headers: <String, String> {
+                                                    'Content-Type': 'application/json; charset=UTF-8',
+                                                    },);
+                                                    log(res.body.toString());
+                                                    // log(res.statusCode.toString());
+                                                    if(res.statusCode == 200) {
+                                                      // log("return ok");
+                                                      if(res.body == "false") {
+                                                        log("cancel ride failed");
+                                                      }
+                                                      else {
+                                                        log("cancel success");
+                                                      }
+                                                    }
+                                                    else {
+                                                      log("error");
+                                                    }
                                                     setState(() {
+                                                      // _dontFetch = false;
                                                     });
-                                                  },
+                                                    Navigator.pop(context, 'Yes');
+                                                    },
                                                   child: const Text('Yes'),
                                                 ),
                                               ],
@@ -518,7 +612,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                             children: <Widget>[
                                               Icon(Icons.star, color: appMainColor, size: 18.0,),
                                               SizedBox(width: smallSpace),
-                                              Text((notifList[index].d_data.drate > 0) ? notifList[index].d_data.drate.toString() : '-', style: labelStyle),
+                                              Text((notifList[index].d_data.drate > 0) ? notifList[index].d_data.drate.toStringAsFixed(1) : '-', style: labelStyle),
                                             ],
                                           ),
                                           SizedBox(height: smallSpace),
@@ -536,6 +630,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                                 max: 5,
                                                 onChanged: (newValue) {
                                                   setState(() {
+                                                    // _dontFetch = true;
                                                     _rating = newValue;
                                                   });
                                                 },
@@ -559,9 +654,29 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                       children: <Widget>[
                                         TextButton(
                                           child: Text('Send', style: textButtonStyle,),
-                                          onPressed: () {
-                                            //TODO: ask backend to delete the request
-
+                                          onPressed: () async {
+                                            var changeState = {'oid': notifList[index].id, 'id': userData.id, 'rate':_rating};
+                                            var changeStateEncode = jsonEncode(changeState);
+                                            var res = await http.post(url + '/review', body: changeStateEncode, headers: <String, String> {
+                                              'Content-Type': 'application/json; charset=UTF-8',
+                                            },);
+                                            log(res.body.toString());
+                                            // log(res.statusCode.toString());
+                                            if(res.statusCode == 200) {
+                                              // log("return ok");
+                                              if(res.body == "false") {
+                                                log("review failed");
+                                              }
+                                              else {
+                                                log("take success");
+                                              }
+                                            }
+                                            else {
+                                              log("error");
+                                            }
+                                            setState(() {
+                                              // _dontFetch = false;
+                                            });
                                           },
                                         ),
                                       ],
@@ -603,7 +718,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                             children: <Widget>[
                                               Icon(Icons.star, color: appMainColor, size: 18.0,),
                                               SizedBox(width: smallSpace),
-                                              Text((notifList[index].p_data.prate > 0) ? notifList[index].p_data.prate.toString() : '-', style: labelStyle),
+                                              Text((notifList[index].p_data.prate > 0) ? notifList[index].p_data.prate.toStringAsFixed(1) : '-', style: labelStyle),
                                             ],
                                           ),
                                           SizedBox(height: smallSpace),
@@ -621,6 +736,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                                 max: 5,
                                                 onChanged: (newValue) {
                                                   setState(() {
+                                                    // _dontFetch = true;
                                                     _rating = newValue;
                                                   });
                                                 },
@@ -643,9 +759,29 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                       children: <Widget>[
                                         TextButton(
                                           child: Text('Send', style: textButtonStyle,),
-                                          onPressed: () {
-                                            //TODO: ask backend to delete the request
-
+                                          onPressed: () async {
+                                            var changeState = {'oid': notifList[index].id, 'id': userData.id, 'rate':_rating};
+                                            var changeStateEncode = jsonEncode(changeState);
+                                            var res = await http.post(url + '/review', body: changeStateEncode, headers: <String, String> {
+                                              'Content-Type': 'application/json; charset=UTF-8',
+                                            },);
+                                            log(res.body.toString());
+                                            // log(res.statusCode.toString());
+                                            if(res.statusCode == 200) {
+                                              // log("return ok");
+                                              if(res.body == "false") {
+                                                log("review failed");
+                                              }
+                                              else {
+                                                log("take success");
+                                              }
+                                            }
+                                            else {
+                                              log("error");
+                                            }
+                                            setState(() {
+                                              // _dontFetch = false;
+                                            });
                                           },
                                         ),
                                       ],
@@ -682,7 +818,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                             children: <Widget>[
                                               Icon(Icons.star, color: appMainColor, size: 18.0,),
                                               SizedBox(width: smallSpace),
-                                              Text((notifList[index].p_data.prate > 0) ? notifList[index].p_data.prate.toString() : '-', style: labelStyle),
+                                              Text((notifList[index].p_data.prate > 0) ? notifList[index].p_data.prate.toStringAsFixed(1) : '-', style: labelStyle),
                                             ],
                                           ),
                                           SizedBox(height: smallSpace),
@@ -700,6 +836,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                                 max: 5,
                                                 onChanged: (newValue) {
                                                   setState(() {
+                                                    // _dontFetch = true;
                                                     _rating = newValue;
                                                   });
                                                 },
@@ -722,9 +859,29 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                       children: <Widget>[
                                         TextButton(
                                           child: Text('Send', style: textButtonStyle,),
-                                          onPressed: () {
-                                            //TODO: ask backend to delete the request
-
+                                          onPressed: () async {
+                                            var changeState = {'oid': notifList[index].id, 'id': userData.id, 'rate':_rating};
+                                            var changeStateEncode = jsonEncode(changeState);
+                                            var res = await http.post(url + '/review', body: changeStateEncode, headers: <String, String> {
+                                              'Content-Type': 'application/json; charset=UTF-8',
+                                            },);
+                                            log(res.body.toString());
+                                            // log(res.statusCode.toString());
+                                            if(res.statusCode == 200) {
+                                              // log("return ok");
+                                              if(res.body == "false") {
+                                                log("review failed");
+                                              }
+                                              else {
+                                                log("take success");
+                                              }
+                                            }
+                                            else {
+                                              log("error");
+                                            }
+                                            setState(() {
+                                              // _dontFetch = false;
+                                            });
                                           },
                                         ),
                                       ],
@@ -761,7 +918,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                             children: <Widget>[
                                               Icon(Icons.star, color: appMainColor, size: 18.0,),
                                               SizedBox(width: smallSpace),
-                                              Text((notifList[index].d_data.drate > 0) ? notifList[index].d_data.drate.toString() : '-', style: labelStyle),
+                                              Text((notifList[index].d_data.drate > 0) ? notifList[index].d_data.drate.toStringAsFixed(1) : '-', style: labelStyle),
                                             ],
                                           ),
                                           SizedBox(height: smallSpace),
@@ -779,6 +936,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                                 max: 5,
                                                 onChanged: (newValue) {
                                                   setState(() {
+                                                    // _dontFetch = true;
                                                     _rating = newValue;
                                                   });
                                                 },
@@ -801,8 +959,29 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                       children: <Widget>[
                                         TextButton(
                                           child: Text('Send', style: textButtonStyle,),
-                                          onPressed: () {
-                                            //TODO: ask backend to delete the request
+                                          onPressed: () async {
+                                            var changeState = {'oid': notifList[index].id, 'id': userData.id, 'rate':_rating};
+                                            var changeStateEncode = jsonEncode(changeState);
+                                            var res = await http.post(url + '/review', body: changeStateEncode, headers: <String, String> {
+                                              'Content-Type': 'application/json; charset=UTF-8',
+                                            },);
+                                            log(res.body.toString());
+                                            // log(res.statusCode.toString());
+                                            if(res.statusCode == 200) {
+                                              // log("return ok");
+                                              if(res.body == "false") {
+                                                log("review failed");
+                                              }
+                                              else {
+                                                log("take success");
+                                              }
+                                            }
+                                            else {
+                                              log("error");
+                                            }
+                                            setState(() {
+                                              // _dontFetch = false;
+                                            });
                                           },
                                         ),
                                       ],
@@ -813,17 +992,24 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                 var notAccepted = [notAccepted_p, notAccepted_d];
                                 var Accepted = [Accepted_p, Accepted_d];
                                 var Finished = [Finished_p, Finished_d];
-                                var DeclinedBeforeAccepted = [Text('state3'), Text('state3')];
-                                var DeclinedByP = [Text('state4'), DeclinedByP_d];
-                                var DeclinedByD= [DeclinedByD_p, Text('state5')];
+                                var DeclinedBeforeAccepted = [Offstage(offstage: true), Offstage(offstage: true)];
+                                var DeclinedByP = [Offstage(offstage: true), DeclinedByP_d];
+                                var DeclinedByD= [DeclinedByD_p, Offstage(offstage: true)];
 
                                 var cardList = [
                                   notAccepted, Accepted, Finished, DeclinedBeforeAccepted, DeclinedByP, DeclinedByD,
                                 ];
-                                log(_state[index].toString());
+                                // log(_stateDriver.toString());
+                                if (notifList.isEmpty) {
+                                  return Center(
+                                    child: Card(
+                                      child: cardList[0][_status],
+                                    ),
+                                  );
+                                }
                                 return Center(
                                   child: Card(
-                                    child: cardList[_state[index]][_status],
+                                    child: cardList[notifList[index].state][_status],
                                   ),
                                 );
                               },

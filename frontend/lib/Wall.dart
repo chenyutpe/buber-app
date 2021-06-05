@@ -91,7 +91,7 @@ class WallList extends State<WallPage> {
                                   return startIsEmptyText;
                                 }
                                 else {
-                                  log("Save start");
+                                  // log("Save start");
                                   newRide['s'] = value;
                                   return null;
                                 }
@@ -118,7 +118,7 @@ class WallList extends State<WallPage> {
                                   return destIsEmptyText;
                                 }
                                 else {
-                                  log("Save dest");
+                                  // log("Save dest");
                                   newRide['d'] = value;
                                   return null;
                                 }
@@ -140,6 +140,7 @@ class WallList extends State<WallPage> {
                           ),
                           onPressed: () async {
                             if(_formKey.currentState!.validate()) {
+                              log("newRide:");
                               log(newRide["pid"].toString());
                               log(newRide["s"].toString());
                               log(newRide["d"].toString());
@@ -147,7 +148,7 @@ class WallList extends State<WallPage> {
                               var res =  await http.post(url + '/call', body: newRideEncoded , headers: <String, String>{
                                 'Content-Type': 'application/json; charset=UTF-8',
                               },);
-                              log(res.statusCode.toString());
+                              // log(res.statusCode.toString());
                               if (res.statusCode == 200) {
                                   pList.add(res.body);
                                   log("Ride id: " + pList[0]);
