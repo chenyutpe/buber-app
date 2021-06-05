@@ -128,6 +128,12 @@ class Connection():
         """
         return self.db.request.find_one({'_id': oid})
 
+    def getReqListOf(self, pid: ObjectId()):
+        return self.db.request.find({'pid': pid})
+    
+    def getDriveListOf(self, did: ObjectId()):
+        return self.db.request.find({'did': did})
+
     #搜尋共乘
     def search(self, s: str = '', d: str = ''):
         """

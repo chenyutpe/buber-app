@@ -98,6 +98,34 @@ def get_ride(id):
         return 'failed'
     return json_encode(ride_data)
 
+@app.route('/ridesCalledBy/<id>', methods=['GET'])
+def get_rides_called_by(id):
+    pid = ObjectId(id)
+
+    searched_rides = list(db.getReqListOf(pid))
+    searched_rides = [r for r in searched_rides if r['state'] not in [3,4]]
+    searched_rides = [r for r in searched_rides if r['drate'] == None]
+
+    for ride_data in searched_rides:
+        ride_data['p_data'] = db.getUserData(ride_data['pid'])
+        ride_data['d_data'] = db.getUserData(ride_data['did'])
+
+    return json_encode(searched_rides)
+
+@app.route('/ridesTookBy/<id>', methods=['GET'])
+def get_rides_took_by(id):
+    did = ObjectId(id)
+
+    searched_rides = list(db.getDriveListOf(did))
+    searched_rides = [r for r in searched_rides if r['state'] not in [3,5]]
+    searched_rides = [r for r in searched_rides if r['prate'] == None]
+
+    for ride_data in searched_rides:
+        ride_data['p_data'] = db.getUserData(ride_data['pid'])
+        ride_data['d_data'] = db.getUserData(ride_data['did'])
+        
+    return json_encode(searched_rides)
+
 @app.route('/search', methods=['GET'])
 def search():
     # No loc for now
