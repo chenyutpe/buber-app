@@ -92,16 +92,12 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     log("Enter notificaion");
-    return MaterialApp(
-            title: mainPageTag,
-            home: Scaffold(
+    return Scaffold(
               appBar: AppBar(
                 backgroundColor: appBackgroundColor,
                 title: Text('Notification', style: TextStyle(fontSize: 24.0, color: appMainColor)),
                 leading: GestureDetector(
-                  onTap: (){Navigator.push(context, new MaterialPageRoute(
-                      builder: (context) => new MainPage())
-                  );},
+                  onTap: (){Navigator.of(context).pop();},
                   child: Icon(
                     Icons.arrow_back,
                     color: appMainColor,
@@ -113,17 +109,30 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                       padding: EdgeInsets.only(right: 24.0),
                       child: GestureDetector(
                         onTap: (){
-                          Navigator.push(context, new MaterialPageRoute(
-                              builder: (context) => new Wall())
-                          );
+                          setState(() {
+                          });
                         },
                         child: Icon(
-                          Icons.pedal_bike,
+                          Icons.refresh,
                           color: appMainColor,
                           size: 30.0,
                         ),
                       )
                   ),
+                  // This mat make routing messy
+                  // Padding(
+                  //     padding: EdgeInsets.only(right: 24.0),
+                  //     child: GestureDetector(
+                  //       onTap: (){
+                  //         Navigator.of(context).pushNamed(wallTag);
+                  //       },
+                  //       child: Icon(
+                  //         Icons.pedal_bike,
+                  //         color: appMainColor,
+                  //         size: 30.0,
+                  //       ),
+                  //     )
+                  // ),
                 ],
                 bottom: TabBar(
                   controller: _tabController,
@@ -133,7 +142,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
               body: FutureBuilder<List<List<Ride>>>(
                 future: _future,
                 builder: (context,AsyncSnapshot<List<List<Ride>>> snapshot) {
-                print("snapshot: $snapshot");
+                // print("snapshot: $snapshot");
                 switch (snapshot.connectionState) {
                   case ConnectionState.none: return new Center(child: Text('None', textScaleFactor: 3));
                   case ConnectionState.waiting: return new Center(
@@ -1049,12 +1058,11 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                       );
                 }
             }),
-            ),
-      routes: routes,);
+            );
   }
 }
-
-final routes = <String, WidgetBuilder> {
-  mainPageTag: (context) => MainPage(),
-  wallTag: (context) => Wall(),
-};
+//
+// final routes = <String, WidgetBuilder> {
+//   mainPageTag: (context) => MainPage(),
+//   wallTag: (context) => Wall(),
+// };
