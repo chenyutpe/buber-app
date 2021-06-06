@@ -18,6 +18,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
   var tabList = ( userData.is_driver == 0 ) ? tabPList : tabDList;
   var _rating = List.filled(maxClientReq, 3.0);
   Future<List<List<Ride>>>? _future;
+  Timer? _timer;
   // var _dontFetch = false;
   // List<Ride> notifList = [];
   // var _stateDriver = 0;
@@ -28,15 +29,18 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
   void initState() {
     _future = getRide();
     _tabController = TabController(vsync: this, length: tabList.length);
-    new Timer.periodic(Duration(seconds: 20), (Timer t) => setState((){
+    _timer = new Timer.periodic(Duration(seconds: 20), (Timer t) {
+      setState((){
       _future = getRide();
-    }));
+      });
+    });
     super.initState();
   }
 
   @override
   void dispose() {
     _tabController.dispose();
+    _timer?.cancel();
     super.dispose();
   }
 
@@ -115,6 +119,12 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                       child: GestureDetector(
                         onTap: (){
                           setState(() {
+                            _timer?.cancel();
+                            _timer = new Timer.periodic(Duration(seconds: 20), (Timer t) {
+                              setState((){
+                                _future = getRide();
+                              });
+                            });
                             _future = getRide();
                           });
                         },
