@@ -368,16 +368,16 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                               }
                                               else {
                                                 log("take success");
-                                                setState((){
-                                                  _timer?.cancel();
-                                                  _timer = new Timer.periodic(Duration(seconds: 20), (Timer t) {
-                                                    setState((){
-                                                      _future = getRide();
-                                                    });
-                                                  });
-                                                  _future = getRide();
-                                                });
                                               }
+                                              setState((){
+                                                _timer?.cancel();
+                                                _timer = new Timer.periodic(Duration(seconds: 20), (Timer t) {
+                                                  setState((){
+                                                    _future = getRide();
+                                                  });
+                                                });
+                                                _future = getRide();
+                                              });
                                             }
                                             else {
                                             log("error");
