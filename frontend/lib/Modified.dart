@@ -113,7 +113,6 @@ class ModifiedForm extends State<ModifiedPage> {
 
     final _nameController = TextEditingController(text: editedUser['name'].toString());
     final _deptController = TextEditingController(text: editedUser['dept'].toString());
-    final _gradeController = TextEditingController(text: editedUser['grade'].toString());
     final snackBar = SnackBar(content: Text(uploadImageHintText ));
     // log("be_a_driver "+be_a_driver.toString());
 

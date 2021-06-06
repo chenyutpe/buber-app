@@ -58,8 +58,8 @@ class User {
       gender: json['gender'],
       is_driver: json['is_driver'],
       //cert: '',
-      prate: json['prate'],
-      drate: json['drate'],
+      prate: json['prate'].toDouble(),
+      drate: json['drate'].toDouble(),
     );
     else return new User(
         id: json['_id']['\$oid'],
@@ -71,8 +71,8 @@ class User {
         gender: json['gender'],
         is_driver: json['is_driver'],
         //cert: json['cert']['\$oid'],
-        prate: json['prate'],
-        drate: json['drate'],
+        prate: json['prate'].toDouble(),
+        drate: json['drate'].toDouble(),
     );
   }
 }

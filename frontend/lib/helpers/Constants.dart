@@ -12,7 +12,7 @@ var dList = [];
 var driverRideId = '';
 
 //Url
-final url = url_web;
+final url = url_emulator;
 const url_web = 'http://127.0.0.1:5000';
 const url_emulator = 'http://10.0.2.2:5000';
 
