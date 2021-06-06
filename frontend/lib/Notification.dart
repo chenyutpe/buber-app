@@ -255,6 +255,12 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                                       else {
                                                         log("take success");
                                                         setState(() {
+                                                          _timer?.cancel();
+                                                          _timer = new Timer.periodic(Duration(seconds: 20), (Timer t) {
+                                                            setState((){
+                                                              _future = getRide();
+                                                            });
+                                                          });
                                                           _future = getRide();
                                                         });
                                                       }
@@ -363,6 +369,12 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                               else {
                                                 log("take success");
                                                 setState((){
+                                                  _timer?.cancel();
+                                                  _timer = new Timer.periodic(Duration(seconds: 20), (Timer t) {
+                                                    setState((){
+                                                      _future = getRide();
+                                                    });
+                                                  });
                                                   _future = getRide();
                                                 });
                                               }
@@ -444,6 +456,12 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                               else {
                                                 log("finish ride success");
                                                 setState(() {
+                                                  _timer?.cancel();
+                                                  _timer = new Timer.periodic(Duration(seconds: 20), (Timer t) {
+                                                    setState((){
+                                                      _future = getRide();
+                                                    });
+                                                  });
                                                   _future = getRide();
                                                 });
                                               }
@@ -486,6 +504,12 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                                       else {
                                                         log("cancel success");
                                                         setState(() {
+                                                          _timer?.cancel();
+                                                          _timer = new Timer.periodic(Duration(seconds: 20), (Timer t) {
+                                                            setState((){
+                                                              _future = getRide();
+                                                            });
+                                                          });
                                                           _future = getRide();
                                                         });
                                                       }
@@ -588,6 +612,12 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                                       else {
                                                         log("cancel success");
                                                         setState(() {
+                                                          _timer?.cancel();
+                                                          _timer = new Timer.periodic(Duration(seconds: 20), (Timer t) {
+                                                            setState((){
+                                                              _future = getRide();
+                                                            });
+                                                          });
                                                           _future = getRide();
                                                         });
                                                       }
@@ -701,6 +731,12 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                               else {
                                                 log("review success");
                                                 setState(() {
+                                                  _timer?.cancel();
+                                                  _timer = new Timer.periodic(Duration(seconds: 20), (Timer t) {
+                                                    setState((){
+                                                      _future = getRide();
+                                                    });
+                                                  });
                                                   _future = getRide();
                                                   _rating[index] = 3.0;
                                                 });
@@ -808,6 +844,12 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                               else {
                                                 log("review success");
                                                 setState(() {
+                                                  _timer?.cancel();
+                                                  _timer = new Timer.periodic(Duration(seconds: 20), (Timer t) {
+                                                    setState((){
+                                                      _future = getRide();
+                                                    });
+                                                  });
                                                   _future = getRide();
                                                   _rating[index] = 3.0;
                                                 });
@@ -910,6 +952,12 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                               else {
                                                 log("review success");
                                                 setState(() {
+                                                  _timer?.cancel();
+                                                  _timer = new Timer.periodic(Duration(seconds: 20), (Timer t) {
+                                                    setState((){
+                                                      _future = getRide();
+                                                    });
+                                                  });
                                                   _future = getRide();
                                                   _rating[index] = 3.0;
                                                 });
@@ -1011,6 +1059,12 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                               else {
                                                 log("review success");
                                                 setState(() {
+                                                  _timer?.cancel();
+                                                  _timer = new Timer.periodic(Duration(seconds: 20), (Timer t) {
+                                                    setState((){
+                                                      _future = getRide();
+                                                    });
+                                                  });
                                                   _future = getRide();
                                                   _rating[index] = 3.0;
                                                 });
