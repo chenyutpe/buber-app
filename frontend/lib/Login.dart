@@ -109,7 +109,7 @@ class LoginPage extends State<Login> {
                 var u = User.fromJson(jsonDecode(res.body));
                 log("user id: " + u.id);
                 userData = u;
-                Navigator.of(context).pushNamedAndRemoveUntil(mainPageTag, (Route<dynamic> route) => false, arguments: u);
+                Navigator.of(context).pushNamedAndRemoveUntil(mainPageTag, (Route<dynamic> route) => false);
               }
             }
             else {

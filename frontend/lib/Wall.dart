@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'helpers/Constants.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'models/User.dart';
 import 'MainPage.dart';
 import 'Notification.dart';
 import 'dart:developer';
@@ -15,7 +16,9 @@ class Wall extends StatelessWidget {
         backgroundColor: appBackgroundColor,
         title: Text(reqTitle, style: TextStyle(fontSize: 24.0, color: appMainColor)),
         leading: GestureDetector(
-          onTap: (){Navigator.of(context).pop();},
+          onTap: (){
+            Navigator.of(context).pushNamedAndRemoveUntil(mainPageTag, (Route<dynamic> route) => false);
+            },
           child: Icon(
             Icons.arrow_back,
             color: appMainColor,

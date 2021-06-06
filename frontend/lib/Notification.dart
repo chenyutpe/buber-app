@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'helpers/Constants.dart';
 import 'package:http/http.dart' as http;
+import 'dart:async';
 import 'dart:convert';
 import 'models/Ride.dart';
 import 'dart:developer';
@@ -15,7 +16,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   // var rating;
   var tabList = ( userData.is_driver == 0 ) ? tabPList : tabDList;
-  var _rating = List.filled(maxClientReq, 3.0); //dirty and ugly
+  var _rating = List.filled(maxClientReq, 3.0);
   Future<List<List<Ride>>>? _future;
   // var _dontFetch = false;
   // List<Ride> notifList = [];
@@ -27,6 +28,9 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
   void initState() {
     _future = getRide();
     _tabController = TabController(vsync: this, length: tabList.length);
+    new Timer.periodic(Duration(seconds: 20), (Timer t) => setState((){
+      _future = getRide();
+    }));
     super.initState();
   }
 
@@ -78,7 +82,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
     // log(temp.length.toString());
     for(var i = 0; i < temp.length; i++) {
       var r = Ride.fromJson(temp[i]);
-      d.add(r);
+      if(r.pid != userData.id) d.add(r);
     }
 
     // log(d.toString());
@@ -90,12 +94,15 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     log("Enter notificaion");
+    log("_rating: " + _rating.toString());
     return Scaffold(
               appBar: AppBar(
                 backgroundColor: appBackgroundColor,
                 title: Text(notificationTag, style: TextStyle(fontSize: 24.0, color: appMainColor)),
                 leading: GestureDetector(
-                  onTap: (){Navigator.of(context).pop();},
+                  onTap: () {
+                    Navigator.of(context).pushNamedAndRemoveUntil(mainPageTag, (Route<dynamic> route) => false);
+                    },
                   child: Icon(
                     Icons.arrow_back,
                     color: appMainColor,
@@ -144,10 +151,12 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                 builder: (context,AsyncSnapshot<List<List<Ride>>> snapshot) {
                 // print("snapshot: $snapshot");
                 switch (snapshot.connectionState) {
-                  case ConnectionState.none: return new Center(child: Text('None', textScaleFactor: 3));
-                  case ConnectionState.waiting: return new Center(
-                    child: new CircularProgressIndicator(valueColor: new AlwaysStoppedAnimation<Color>(appMainColor),),
-                  );
+                  case ConnectionState.none:
+                    return new Center(child: Text('None', textScaleFactor: 3));
+                  case ConnectionState.waiting:
+                    return new Center(
+                      child: new CircularProgressIndicator(valueColor: new AlwaysStoppedAnimation<Color>(appMainColor),),
+                    );
                   default:
                     if (snapshot.hasError)
                       return new Center(child: Text('：）', textScaleFactor: 3));
@@ -667,6 +676,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                           child: Text('Send', style: textButtonStyle,),
                                           onPressed: () async {
                                             var changeState = {'oid': notifList[index].id, 'id': userData.id, 'rate':_rating[index]};
+                                            log("_rating[index]: " + _rating[index].toString());
                                             var changeStateEncode = jsonEncode(changeState);
                                             var res = await http.post(url + '/review', body: changeStateEncode, headers: <String, String> {
                                               'Content-Type': 'application/json; charset=UTF-8',
@@ -773,6 +783,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                           child: Text('Send', style: textButtonStyle,),
                                           onPressed: () async {
                                             var changeState = {'oid': notifList[index].id, 'id': userData.id, 'rate':_rating[index]};
+                                            log("_rating[index]: " + _rating[index].toString());
                                             var changeStateEncode = jsonEncode(changeState);
                                             var res = await http.post(url + '/review', body: changeStateEncode, headers: <String, String> {
                                               'Content-Type': 'application/json; charset=UTF-8',
@@ -874,6 +885,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                                           child: Text('Send', style: textButtonStyle,),
                                           onPressed: () async {
                                             var changeState = {'oid': notifList[index].id, 'id': userData.id, 'rate':_rating[index]};
+                                            log("_rating[index]: " + _rating[index].toString());
                                             var changeStateEncode = jsonEncode(changeState);
                                             var res = await http.post(url + '/review', body: changeStateEncode, headers: <String, String> {
                                               'Content-Type': 'application/json; charset=UTF-8',
@@ -1032,7 +1044,7 @@ class NotifPage extends State<Notif> with SingleTickerProviderStateMixin {
                           );
                         }).toList(),
                       );
-                }
+                    }
             }),
             );
   }
